@@ -35,6 +35,7 @@ module.exports = function (passport) {
                         newUser.local.username = req.param('username');
                         newUser.local.email = email;
                         newUser.local.password = newUser.generateHash(password);
+                        newUser.songs = [];
                         newUser.save(function (err) {
                             if (err) throw err;
                             fs.mkdir( songsfolder + newUser._id , function(err) {
