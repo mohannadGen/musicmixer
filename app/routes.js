@@ -2,7 +2,8 @@ module.exports = function(app,passport){
     //==== Home page of music mixer =======
     //=====================================
     app.get('/',function(req,res){
-        res.render('index.ejs');
+        //res.render('index.ejs');
+        res.render('login.ejs',{message:req.flash('loginMessage')});
     });
     //======== User login page  ===========
     //=====================================
@@ -10,7 +11,11 @@ module.exports = function(app,passport){
         res.render('login.ejs',{message:req.flash('loginMessage')});
     });
 
-    //app.post('/login',function(req,res){});
+    app.post('/login', passport.authenticate('local-login', {
+        successRedirect : '/profile',
+        failureRedirect : '/login',
+        failureFlash : true
+    }));
 
     //======== User signup page  ===========
     //======================================

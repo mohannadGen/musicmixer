@@ -1,0 +1,35 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+    <title>Node Authentication</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <style>
+        body        { padding-top:10px; word-wrap:break-word; }
+    </style>
+</head>
+<body>
+<div>
+    <div>
+        <div class="row">
+            <div>
+                <div class="well" >
+                    <h3><span class="fa fa-user"></span> <%= user.local.first %> <%= user.local.last %></h3>
+                    <p>
+                        <strong>email</strong>: <%= user.local.email %>
+                        <a href="/logout" class="btn btn-primary  pull-right">Logout</a>
+                    </p>
+                   <div></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+</div>
+</body>
+</html>
