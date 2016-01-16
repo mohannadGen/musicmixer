@@ -3,9 +3,9 @@
 <html>
 <head>
     <title>Music Mixer</title>
+
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css"/>
     <link rel="stylesheet" href="dist/css/formValidation.css"/>
-
     <script type="text/javascript" src="vendor/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="dist/js/formValidation.js"></script>
@@ -20,14 +20,12 @@
 <div class="container">
 
     <div class="col-sm-6 col-sm-offset-3">
+        <!-- show any messages that come back with authentication -->
 
         <h1><span class="col-sm-1 fa fa-sign-in"></span> Signup</h1>
-
-        <!-- show any messages that come back with authentication -->
         <% if (message.length > 0) { %>
-        <div class="col-sm-4 alert alert-danger"><%= message %></div>
+        <div class="col-sm-8 col-sm-offset-4 alert alert-danger"><%= message %></div>
         <% } %>
-
         <!-- LOGIN FORM -->
         <form id="defaultForm" method="post" class="form-horizontal">
             <div class="form-group">
@@ -44,7 +42,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label">Username</label>
 
-                <div class="col-sm-5">
+                <div class="col-sm-8">
                     <input type="text" class="form-control" name="username"/>
                 </div>
             </div>
@@ -52,7 +50,7 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label">Email address</label>
 
-                <div class="col-sm-5">
+                <div class="col-sm-8">
                     <input type="text" class="form-control" name="email"/>
                 </div>
             </div>
@@ -60,14 +58,14 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label">Password</label>
 
-                <div class="col-sm-5">
+                <div class="col-sm-8">
                     <input type="password" class="form-control" name="password"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-4 control-label">Retype Password</label>
 
-                <div class="col-sm-5">
+                <div class="col-sm-8">
                     <input type="password" class="form-control" name="confirmpassword"/>
                 </div>
             </div>
@@ -76,18 +74,17 @@
             <div class="form-group">
                 <label class="col-sm-4 control-label" id="captchaOperation"></label>
 
-                <div class="col-sm-5">
+                <div class="col-sm-8">
                     <input type="text" class="form-control" name="captcha"/>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-12 col-sm-offset-4">
-                    <button type="submit" class="btn btn-primary" name="signup" value="Sign up">Submit</button>
+                    <button type="submit" class="btn btn-primary" name="signup" value="Sign up">Sign up</button>
                 </div>
             </div>
         </form>
-
         <script type="text/javascript">
             $(document).ready(function () {
                 // Generate a simple captcha
@@ -155,6 +152,10 @@
                                 different: {
                                     field: 'username',
                                     message: 'The password cannot be the same as username'
+                                },
+                                stringLength:{
+                                    min : '8',
+                                    message:'password length must be at least 8 characters'
                                 }
                             }
                         },
@@ -198,8 +199,6 @@
                 });
             });
         </script>
-
-
         <hr>
 
         <p>Already have an account? <a href="/login">Login</a></p>

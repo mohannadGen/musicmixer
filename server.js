@@ -12,7 +12,7 @@ var path         = require('path')
 // database configuration ===========================
 var configDB = require('./config/database.js');
 mongoose.connect(configDB.url);
-// require('./config/passport')(passport); // pass passport for configuration
+require('./config/passport')(passport); // pass passport for configuration
 // ==================================================
 // setting up express application ===================
 app.use(morgan('dev')); // loging requests to console
@@ -21,7 +21,7 @@ app.use(bodyParser()); // to get values of html forms
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs');
 // setting passport
-app.use(session({secret:'a622946d-6efa-4698-bf10-a5297be54152'}));
+app.use(session({secret:'a622946d-6efa-4698-bf10-a5297be5415'}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());

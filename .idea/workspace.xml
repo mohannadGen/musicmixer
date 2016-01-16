@@ -2,85 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="617ce1e8-7dc0-4b78-b103-5864e6054441" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/fonts/glyphicons-halflings-regular.eot" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/fonts/glyphicons-halflings-regular.woff" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/jasmine/jasmine_favicon.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/css/formValidation.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/css/formValidation.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/formValidation.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/formValidation.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/bootstrap.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/bootstrap.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/foundation.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/foundation.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/pure.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/pure.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/semantic.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/semantic.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/uikit.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/framework/uikit.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/ar_MA.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/be_FR.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/be_NL.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/bg_BG.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/ca_ES.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/cs_CZ.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/da_DK.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/de_DE.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/en_US.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/es_CL.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/es_ES.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/eu_ES.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/fa_IR.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/fi_FI.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/fr_FR.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/gr_EL.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/he_IL.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/hi_IN.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/hu_HU.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/id_ID.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/it_IT.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/ja_JP.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/nl_NL.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/no_NO.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/pl_PL.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/pt_BR.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/pt_PT.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/ro_RO.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/ru_RU.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/sk_SK.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/sq_AL.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/sr_RS.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/sv_SE.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/th_TH.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/tr_TR.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/ua_UA.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/vi_VN.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/zh_CN.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/dist/js/language/zh_TW.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/css/bootstrap-theme.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/css/bootstrap-theme.css.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/css/bootstrap-theme.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/css/bootstrap.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/css/bootstrap.css.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/css/bootstrap.min.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/fonts/glyphicons-halflings-regular.svg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/js/bootstrap.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/js/bootstrap.min.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/bootstrap/js/npm.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/jasmine/boot.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/jasmine/console.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/jasmine/jasmine-html.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/jasmine/jasmine.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/jasmine/jasmine.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/public/vendor/jquery/jquery.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/user.js" afterPath="$PROJECT_DIR$/app/models/user.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/routes.js" afterPath="$PROJECT_DIR$/app/routes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/database.js" afterPath="$PROJECT_DIR$/config/database.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/passport.js" afterPath="$PROJECT_DIR$/config/passport.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/index.ejs" afterPath="$PROJECT_DIR$/views/index.ejs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/login.ejs" afterPath="$PROJECT_DIR$/views/login.ejs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/views/signup.ejs" afterPath="$PROJECT_DIR$/views/signup.ejs" />
     </list>
     <ignored path="musicmixer.iws" />
@@ -103,11 +28,41 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="signup.ejs" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/views/signup.ejs">
+      <file leaf-file-name="passport.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/passport.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7063621">
-              <caret line="167" column="70" selection-start-line="167" selection-start-column="70" selection-end-line="167" selection-end-column="70" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="database.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config/database.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="2" column="1" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="routes.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/routes.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="24" column="8" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="profile.ejs" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/views/profile.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -117,7 +72,27 @@
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="51" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="51" />
+              <caret line="23" column="60" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="signup.ejs" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/views/signup.ejs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.26427406">
+              <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="user.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/models/user.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -136,10 +111,12 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/routes.js" />
         <option value="$PROJECT_DIR$/views/index.ejs" />
         <option value="$PROJECT_DIR$/views/login.ejs" />
         <option value="$PROJECT_DIR$/views/hh.html" />
+        <option value="$PROJECT_DIR$/app/routes.js" />
+        <option value="$PROJECT_DIR$/app/models/user.js" />
+        <option value="$PROJECT_DIR$/config/passport.js" />
         <option value="$PROJECT_DIR$/server.js" />
         <option value="$PROJECT_DIR$/views/signup.ejs" />
       </list>
@@ -199,6 +176,48 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="musicmixer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="musicmixer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="musicmixer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="musicmixer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="musicmixer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="musicmixer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
@@ -211,6 +230,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
+    <property name="nodejs_interpreter_path" value="/usr/bin/node" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -616,8 +636,8 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
-      <command value="run-script" />
-      <scripts />
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="start" />
       <envs />
       <method />
     </configuration>
@@ -647,12 +667,12 @@
       <created>1452930629289</created>
       <option name="number" value="Default" />
       <updated>1452930629289</updated>
-      <workItem from="1452930630624" duration="10549000" />
+      <workItem from="1452930630624" duration="21061000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10549000" />
+    <option name="totallyTimeSpent" value="21061000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1301" height="772" extended-state="6" />
@@ -667,7 +687,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24980783" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11606456" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Statistic" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -691,14 +711,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/routes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="39" column="19" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/vendor/jquery/jquery.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -872,18 +884,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/config/database.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="1" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/profile.ejs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/routes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="24" column="8" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/passport.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="29" selection-start-line="9" selection-start-column="29" selection-end-line="9" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/server.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="51" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="51" />
+          <caret line="23" column="60" selection-start-line="23" selection-start-column="60" selection-end-line="23" selection-end-column="60" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/views/signup.ejs">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7063621">
-          <caret line="167" column="70" selection-start-line="167" selection-start-column="70" selection-end-line="167" selection-end-column="70" />
+        <state vertical-scroll-proportion="0.26427406">
+          <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
           <folding />
         </state>
       </provider>
