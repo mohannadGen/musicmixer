@@ -1,5 +1,6 @@
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../app/models/user');
+var fs = require('fs');
 
 module.exports = function (passport) {
 
@@ -35,6 +36,13 @@ module.exports = function (passport) {
                         newUser.local.password = newUser.generateHash(password);
                         newUser.save(function (err) {
                             if (err) throw err;
+                            fs.mkdir(__dirname + '/../users/' + newUser._id , function(err) {
+                                if (err) {
+                                    throw err;
+                                } else {
+                                   console.log("Folder " + newUser._id + " has been created. ")
+                                }
+                            });
                             return callback(null, newUser);
                         });
                     }
