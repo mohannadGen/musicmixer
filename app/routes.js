@@ -49,8 +49,18 @@ module.exports = function(app,passport){
 
     //======== User profile page  ===========
     //=======================================
+    var fs = require('fs'),
+        path = require('path');
+
+    function getDirectories(srcpath) {
+        return fs.readdirSync(srcpath).filter(function(file) {
+            return fs.statSync(path.join(srcpath, file)).isDirectory();
+        });
+    };
+
     app.get('/profile',isLoggedIn,function(req,res){
-        res.render('profile.ejs',{user:req.user});
+        var songslist = getDirectories( __dirname + "/../users/"+req.user._id);
+        res.render('profile.ejs',{user:req.user,songs:songslist,message:req.flash('doublicateName')});
     });
 
     //======== User logout page  ============
@@ -66,21 +76,31 @@ module.exports = function(app,passport){
             uploadedImages,
             uploadedImagesCounter = 0;
 
+        var pp = __dirname + "/../users/"+req.user._id+"/"+req.param("songname");
+
+        try{
+            fs.mkdirSync(pp);
+        }catch (e){
+            var songslist = getDirectories( __dirname + "/../users/"+req.user._id);
+            req.flash('doublicateName', 'Douplicate song name   ');
+            return res.render('profile.ejs',{user:req.user,songs:songslist,message:req.flash('doublicateName')});
+        }
+
+
         if(req.files && req.files.uploadedImages) {
             uploadedImages = Array.isArray(req.files.uploadedImages) ? req.files.uploadedImages : [req.files.uploadedImages];
 
             uploadedImages.forEach(function (value) {
                 console.log(value);
-                newPath = __dirname + "/../public/uploads/" + path.parse(value.path).base;
+                newPath = pp +"/" + value.originalFilename;
                 console.log(newPath);
                 fs.renameSync(value.path, newPath);
 
                 uploadedFileNames.push(parseFile(newPath, req));
             });
 
-            res.type('application/json');
-            res.send(JSON.parse(JSON.stringify({"uploadedFileNames": uploadedFileNames})));
-
+            //res.render('profile.ejs',{user:req.user,message:req.flash('doublicateName')});
+            res.redirect('/profile');
         }
     });
 };
