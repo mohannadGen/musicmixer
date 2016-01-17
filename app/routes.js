@@ -75,9 +75,7 @@ module.exports = function(app,passport){
             uploadedFileNames = [],
             uploadedImages,
             uploadedImagesCounter = 0;
-
         var pp = __dirname + "/../users/"+req.user._id+"/"+req.param("songname");
-
         try{
             fs.mkdirSync(pp);
         }catch (e){
@@ -85,8 +83,6 @@ module.exports = function(app,passport){
             req.flash('doublicateName', 'Douplicate song name   ');
             return res.render('profile.ejs',{user:req.user,songs:songslist,message:req.flash('doublicateName')});
         }
-
-
         if(req.files && req.files.uploadedImages) {
             uploadedImages = Array.isArray(req.files.uploadedImages) ? req.files.uploadedImages : [req.files.uploadedImages];
 
@@ -103,10 +99,33 @@ module.exports = function(app,passport){
             res.redirect('/profile');
         }
     });
+
+    app.get('/:song/delete',function(req,res){
+        var songname = req.params.song;
+        var pp = __dirname + "/../users/"+req.user._id+"/"+songname;
+        console.log(pp);
+        deleteFolderRecursive(pp);
+        res.redirect('/profile');
+    });
+};
+
+
+var deleteFolderRecursive = function(path) {
+    if( fs.existsSync(path) ) {
+        fs.readdirSync(path).forEach(function(file,index){
+            var curPath = path + "/" + file;
+            if(fs.lstatSync(curPath).isDirectory()) { // recurse
+                deleteFolderRecursive(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(path);
+    }
 };
 
 function isLoggedIn(req,res,next){
     if(req.isAuthenticated())
         return next();
     res.redirect('/');
-}
+};
