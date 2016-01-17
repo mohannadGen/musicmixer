@@ -1,3 +1,21 @@
+sys = require('sys'),
+    fs = require('fs'),
+    path = require('path'),
+    bytes = require('bytes');
+
+parseFile = function(file, req) {
+    var parsedFile = path.parse(file),
+        fullUrl = req.protocol + '://' + req.get('host') + '/uploads/';
+
+    return {
+        name: parsedFile.name,
+        base: parsedFile.base,
+        extension: parsedFile.ext.substring(1),
+        url: fullUrl + parsedFile.base,
+        size: bytes(fs.statSync(file).size)
+    };
+};
+
 module.exports = function(app,passport){
     //==== Home page of music mixer =======
     //=====================================
@@ -40,6 +58,30 @@ module.exports = function(app,passport){
     app.get('/logout',function(req,res){
         req.logout();
         res.redirect('/');
+    });
+    // file upload
+    app.post('/uploadFiles', function (req, res) {
+        var newPath = null,
+            uploadedFileNames = [],
+            uploadedImages,
+            uploadedImagesCounter = 0;
+
+        if(req.files && req.files.uploadedImages) {
+            uploadedImages = Array.isArray(req.files.uploadedImages) ? req.files.uploadedImages : [req.files.uploadedImages];
+
+            uploadedImages.forEach(function (value) {
+                console.log(value);
+                newPath = __dirname + "/../public/uploads/" + path.parse(value.path).base;
+                console.log(newPath);
+                fs.renameSync(value.path, newPath);
+
+                uploadedFileNames.push(parseFile(newPath, req));
+            });
+
+            res.type('application/json');
+            res.send(JSON.parse(JSON.stringify({"uploadedFileNames": uploadedFileNames})));
+
+        }
     });
 };
 

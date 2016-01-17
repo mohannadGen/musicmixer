@@ -1,3 +1,5 @@
+'use strict';
+
 var express      = require('express');
 var app          = express();
 var port         = process.env.PORT || 8080;
@@ -17,7 +19,8 @@ require('./config/passport')(passport); // pass passport for configuration
 // setting up express application ===================
 app.use(morgan('dev')); // loging requests to console
 app.use(cookieParser());
-app.use(bodyParser()); // to get values of html forms
+//app.use(bodyParser()); // to get values of html forms
+app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/_tmp' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine','ejs');
 // setting passport
