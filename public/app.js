@@ -1,49 +1,68 @@
-function initPage() {
-	onUploadForm();	
-};
+// function initPage() {
+// 	onUploadForm();
+// }
 
-function onUploadForm() {
-	var uploadForm = document.forms['ajaxUploadForm'];
+// $(function(){
+// 	$('filesUploadForm').on('submit', function(event){
+// 		event.preventDefault();
+//
+// 		console.log("In Upload Function");
+//
+// 		var form  = $(this);
+// 		var songsData = form.serialize();
+//
+// 		$.ajax({
+// 			type: 'POST', url: '/uploadFiles', data: songsData
+// 		})
+// 		.error(function(){
+// 			console.log('Error in uploading files.');
+// 		})
+// 		.success(function(){
+// 			console.log("Success in upload files.");
+// 			form.trigger("reset");
+// 		});
+// 	});
+// });
 
-	uploadForm.onsubmit = function(event) {
-		event.preventDefault();
-		var formData = new FormData(),
-			uploadedImages = uploadForm['uploadedImages'].files;
-		for (var i = 0; i < uploadedImages.length; i++) {
-			formData.append('uploadedImages[]', uploadedImages[i]);	
-		};
-		ajaxx(uploadForm.action, uploadForm.method, formData, appendImages);
-	};
+// function onUploadForm() {
+// 	var uploadForm = document.forms['ajaxUploadForm'];
+// 	alert('Hello There');
+// 	uploadForm.onsubmit = function(event) {
+// 		event.preventDefault();
+// 		var formData = new FormData(),
+// 			uploadedImages = uploadForm['uploadedImages'].files;
+// 		for (var i = 0; i < uploadedImages.length; i++) {
+// 			formData.append('uploadedImages[]', uploadedImages[i]);
+// 		}
+// 		ajaxx(uploadForm.action, uploadForm.method, formData, appendImages);
+// 	};
+//
+// 	function appendImages(responseText, status) {
+// 		var uploadedImagesContainer = document.getElementById('uploadedImages');
+//
+// 		responseText['uploadedFileNames'].forEach(function(value) {
+// 			//uploadedImagesContainer.innerHTML += '<img src="/uploads/' + value.base + '" width="150" />';
+// 		});
+// 	}
+// }
 
-	function appendImages(responseText, status) {
-		var uploadedImagesContainer = document.getElementById('uploadedImages');
-
-		responseText['uploadedFileNames'].forEach(function(value) {
-			//uploadedImagesContainer.innerHTML += '<img src="/uploads/' + value.base + '" width="150" />';
-		});
-
-	}
-}
-
-
-
-// Common function to initialize XML Http Request object 
+// Common function to initialize XML Http Request object
 function getHttpRequestObject() {
 	// Define and initialize as false
 	var xmlHttpRequst = false;
-	
+
 	// Mozilla/Safari/Non-IE
-    if (window.XMLHttpRequest) 
+    if (window.XMLHttpRequest)
 	{
         xmlHttpRequst = new XMLHttpRequest();
     }
     // IE
-    else if (window.ActiveXObject) 
+    else if (window.ActiveXObject)
 	{
         xmlHttpRequst = new ActiveXObject("Microsoft.XMLHTTP");
     }
 	return xmlHttpRequst;
-};
+}
 
 // Do the AJAX call to URL specific with rest of the parameters
 function ajaxx(url, method, data, responseHandler, async) {
@@ -53,14 +72,14 @@ function ajaxx(url, method, data, responseHandler, async) {
 	async = async || true;
 	data = data || null;
 	responseHandler = responseHandler || function () {};
-	
-	if(url == "")
+
+	if(url === "")
 	{
 		alert("URL can not be null/blank");
 		return false;
 	}
 	var xmlHttpRequst = getHttpRequestObject();
-	
+
 	// If AJAX supported
 	if(xmlHttpRequst != false)
 	{
@@ -81,12 +100,12 @@ function ajaxx(url, method, data, responseHandler, async) {
 		xmlHttpRequst.onreadystatechange = function() {
 			if(xmlHttpRequst.readyState==4){
 	            if(xmlHttpRequst.status==200) {
-	                responseHandler(JSON.parse(xmlHttpRequst.responseText), xmlHttpRequst.status);           
+	                responseHandler(JSON.parse(xmlHttpRequst.responseText), xmlHttpRequst.status);
 	            } else {
-	            	responseHandler(xmlHttpRequst.responseText, xmlHttpRequst.status);           
+	            	responseHandler(xmlHttpRequst.responseText, xmlHttpRequst.status);
 	            }
 	        }
-			
+
 		};
 		// Send data
 		xmlHttpRequst.send(data);
@@ -94,4 +113,4 @@ function ajaxx(url, method, data, responseHandler, async) {
 	else {
 		console.error("Please use a browser with Ajax support.");
 	}
-};
+}

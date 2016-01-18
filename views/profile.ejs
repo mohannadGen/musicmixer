@@ -54,13 +54,13 @@
             </tbody>
         </table>
         <div class="col-sm-6 col-sm-offset-3">
-        <form action="/uploadFiles", method="post", enctype="multipart/form-data" name="ajaxUploadForm">
+        <form action="/upload" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label>Song name</label>
                 <input type="text" class="form-control" name="songname" required>
             </div>
             <div class="form-group">
-                <input type="file" multiple="multiple" accept="audio/*" name="uploadedImages"/>
+                <input type="file" multiple="multiple" accept="audio/*" name="uploadedSound"/>
             </div>
             <div class="form-group">
                  <input type="submit" value="Upload" class="btn btn-info" />
@@ -72,8 +72,7 @@
         </div>
     </div>
 
-    <script src="app.js" async="true"></script>
-
+    <!-- <script src="app.js" async="true"></script> -->
 
 </div>
 </body>

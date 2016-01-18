@@ -42,7 +42,7 @@ module.exports = function (passport) {
                                 if (err) {
                                     throw err;
                                 } else {
-                                   console.log("Folder " + newUser._id + " has been created. ")
+                                   console.log("Folder " + newUser._id + " has been created. ");
                                 }
                             });
                             return callback(null, newUser);
