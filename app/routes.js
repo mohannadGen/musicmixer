@@ -3,10 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var bytes = require('bytes');
 var multer  = require('multer');
-var upload = multer({
-    dest: 'Sounduploads/',
-    limits: {fileSize: 10000000, files: 10},
-}).array('soundLayers');
+var bodyParser = require('body-parser');
 
 var usersController = require('./controllers/usersController');
 var sharesController = require('./controllers/sharesController');

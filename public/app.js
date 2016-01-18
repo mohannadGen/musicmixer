@@ -1,51 +1,3 @@
-// function initPage() {
-// 	onUploadForm();
-// }
-
-// $(function(){
-// 	$('filesUploadForm').on('submit', function(event){
-// 		event.preventDefault();
-//
-// 		console.log("In Upload Function");
-//
-// 		var form  = $(this);
-// 		var songsData = form.serialize();
-//
-// 		$.ajax({
-// 			type: 'POST', url: '/uploadFiles', data: songsData
-// 		})
-// 		.error(function(){
-// 			console.log('Error in uploading files.');
-// 		})
-// 		.success(function(){
-// 			console.log("Success in upload files.");
-// 			form.trigger("reset");
-// 		});
-// 	});
-// });
-
-// function onUploadForm() {
-// 	var uploadForm = document.forms['ajaxUploadForm'];
-// 	alert('Hello There');
-// 	uploadForm.onsubmit = function(event) {
-// 		event.preventDefault();
-// 		var formData = new FormData(),
-// 			uploadedImages = uploadForm['uploadedImages'].files;
-// 		for (var i = 0; i < uploadedImages.length; i++) {
-// 			formData.append('uploadedImages[]', uploadedImages[i]);
-// 		}
-// 		ajaxx(uploadForm.action, uploadForm.method, formData, appendImages);
-// 	};
-//
-// 	function appendImages(responseText, status) {
-// 		var uploadedImagesContainer = document.getElementById('uploadedImages');
-//
-// 		responseText['uploadedFileNames'].forEach(function(value) {
-// 			//uploadedImagesContainer.innerHTML += '<img src="/uploads/' + value.base + '" width="150" />';
-// 		});
-// 	}
-// }
-
 // Common function to initialize XML Http Request object
 function getHttpRequestObject() {
 	// Define and initialize as false
@@ -81,7 +33,7 @@ function ajaxx(url, method, data, responseHandler, async) {
 	var xmlHttpRequst = getHttpRequestObject();
 
 	// If AJAX supported
-	if(xmlHttpRequst != false)
+	if(xmlHttpRequst !== false)
 	{
 		// Open Http Request connection
 		if(method == "GET")
