@@ -20,12 +20,10 @@
                     <h3><span class="fa fa-user"></span> <%= user.local.first %> <%= user.local.last %></h3>
                     <p>
                         <strong>email</strong>: <%= user.local.email %>
-
                         <span class="pull-right">
-                            <a href="/wall" class="btn btn-primary">Wall </a>
+                            <a href="/shares" class="btn btn-primary">Shares</a>
                             <a href="/logout" class="btn btn-primary"> Logout</a>
                         </span>
-
                     </p>
                    <div></div>
                 </div>
@@ -39,7 +37,7 @@
             <thead>
             <th >Song Name</th>
             <th class ="col-md-1">Delete</th>
-            <th class ="col-md-1">Edit</th>
+            <th class ="col-md-1">Play</th>
             <th class ="col-md-1">Share</th>
             </thead>
             <tbody>
@@ -48,7 +46,7 @@
             <tr>
                 <td><%= songs[i]%></td>
                 <td><p data-placement="top" data-toggle="tooltip" title="Delete"><a href="/<%= songs[i]%>/delete" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></a></p></td>
-                <td><p data-placement="top" data-toggle="tooltip" title="Edit"><a href="/<%= songs[i]%>/edit" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></a></p></td>
+                <td><p data-placement="top" data-toggle="tooltip" title="Play"><a href="/<%= songs[i]%>/play" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-play"></span></a></p></td>
                 <td><p data-placement="top" data-toggle="tooltip" title="Share"><a href="/<%= songs[i]%>/share" class="btn btn-danger btn-xs" data-title="Share" data-toggle="modal" data-target="#share" ><span class="glyphicon glyphicon-share"></span></a></p></td>
             </tr>
             <% } %>
