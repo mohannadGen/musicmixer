@@ -64,7 +64,7 @@
     <div id="tracks">
         <% for(var i=0; i<ttracks.instruments.length; i++) {%>
             <%=ttracks.instruments[i].name%>
-            <button id="mute<%=i%>" onclick="muteUmuteTrac(<%=i%>);" >mute</button><br/>
+            <button id="mute<%=i%>" onclick="muteUnmuteTrack(<%=i%>);" >mute</button><br/>
         <%}%>
     </div>
 </div>
