@@ -15,4 +15,9 @@ exports.createshare = function(req,res){
   res.redirect('/shares');
 };
 
+exports.getshare = function(req,res){
+  res.render ('shares.ejs',{user:req.user});
+};
+
+
 
