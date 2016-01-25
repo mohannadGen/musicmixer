@@ -15,18 +15,18 @@ var playerController = require('./controllers/playerController');
 module.exports = function(app,passport){
     //====================== user routes ==========================
     //=============================================================
-    app.get('/',usersController.login);
-    app.get('/login',usersController.login);
+    app.get('/', usersController.login);
+    app.get('/login', usersController.login);
     app.post('/login', usersController.loginpost(passport));
-    app.get('/signup',usersController.signupget);
+    app.get('/signup', usersController.signupget);
     app.post('/signup', usersController.signuppost(passport));
-    app.get('/profile',isLoggedIn,usersController.getprofile);
-    app.get('/logout',usersController.logout);
+    app.get('/profile', isLoggedIn, usersController.getprofile);
+    app.get('/logout', usersController.logout);
 
     //================= file upload/delete routes =================
     //=============================================================
-    app.post('/uploadFiles', usersController.loadsong);
-    app.get('/:song/delete', isLoggedIn, usersController.deletesong);
+    app.post('/uploadFiles', songsController.loadsong);
+    app.get('/:song/delete', isLoggedIn, songsController.deletesong);
 
     //========================== Shares  ==========================
     //=============================================================
@@ -40,7 +40,6 @@ module.exports = function(app,passport){
 
     app.get('/play/:song', isLoggedIn, playerController.playSong);
     app.get(/\/play\/((\w|.)+)/, playerController.loadtracks);
-
 };
 
 function isLoggedIn(req,res,next){

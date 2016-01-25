@@ -10,14 +10,11 @@ var mongoose = require('mongoose');
 var _ = require('lodash');
 
 exports.playSong = function(req,res){
-    console.log('Playing Song function');
     var songname = req.params.song;
     function sendTrack(track) {
         if (!track)
             return res.send(404, 'Track not found with id "' + songname + '"');
         var d = JSON.stringify(track).replace(/ /g, '');
-        console.log("Server logged User Id: " + req.user._id);
-        console.log("Server logged user: " + req.user);
         res.render('player.ejs', {songname: songname, ttracks :track , stracks : d});
     }
     getTrack(songname, sendTrack, req.user._id);
@@ -25,7 +22,7 @@ exports.playSong = function(req,res){
 
 exports.loadtracks = function (req, res) {
     var songname = req.params[0];
-    var p = __dirname +"/../../users/"+req.user._id+"/"+songname;
+    var p = __dirname + "/../../users/" + req.user._id + "/" + songname;
     var pp = path.resolve(p);
 
     res.sendfile(pp);
@@ -66,7 +63,8 @@ exports.saveComment = function (request, response){
     songModel.findOne({title: songname} , function(err, song){
         song.comments.push({
             body: comment,
-            user: request.user
+            user: request.user,
+            username: request.user.local.username
         });
         song.save(function(){
             response.end();
@@ -77,11 +75,6 @@ exports.saveComment = function (request, response){
 exports.loadComments = function(request, response){
     var songname = request.params.song;
     songModel.findOne({title: songname}, 'comments', function(err, song){
-            response.send(_(song.comments).sortBy(['createdAt']).reverse()
-                           .forEach(function(value){
-                                value.user = usersCtrl.getUsernameById(value.user);
-                                value.createdAt = value.createdAt.toDateString();
-                            })
-            );
+            response.send(_(song.comments).sortBy(['createdAt']).reverse());
     });
 };

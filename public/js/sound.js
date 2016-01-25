@@ -49,8 +49,8 @@ window.requestAnimFrame = (function() {
 
 function init() {
 
-	// Object that draws a sample waveform in a canvas  
-	waveformDrawer = new WaveformDrawer(); 
+	// Object that draws a sample waveform in a canvas
+	waveformDrawer = new WaveformDrawer();
 
 
     // Get handles on buttons
@@ -87,11 +87,11 @@ function init() {
 
     // Init audio context
     context = initAudioContext();
-	
+
 	// Create a filter
 	filter = context.createBiquadFilter();
-    
-    // Get the list of the songs available on the server and build a 
+
+    // Get the list of the songs available on the server and build a
     // drop down menu
     //loadSongList();
     //var tracks = document.getElementById("hidden").value;
@@ -107,12 +107,12 @@ function initAudioContext() {
     var audioContext = window.AudioContext || window.webkitAudioContext;
 
     var ctx = new audioContext();
-	
+
 	//alert(ctx);
 	analyser = ctx.createAnalyser();
 	javascriptNode = ctx.createScriptProcessor(1024, 1, 1);
 	//distortion = ctx.createWaveShaper();
-	
+
 
 
     if(ctx === undefined) {
@@ -151,12 +151,12 @@ function loadAllSoundSamples(tracks) {
             finishedLoading
             );
     bufferLoader.load();
-	
+
 }
 
 function finishedLoading(bufferList) {
     console.log("finished loading");
-    
+
     buffers = bufferList;
     buttonPlay.disabled = false;
 }
@@ -165,14 +165,14 @@ function buildGraph(bufferList) {
     var sources = [];
     // Create a single gain node for master volume
     masterVolumeNode = context.createGain();
-    console.log("in build graph, bufferList.size = " + bufferList.length);	
-	
+    console.log("in build graph, bufferList.size = " + bufferList.length);
+
     bufferList.forEach(function(sample, i) {
-		
+
 		//init context pour la distortion
 		distortionNodes[i] = context.createWaveShaper();
-		
-		
+
+
 		// each sound sample is the  source of a graph
         sources[i] = context.createBufferSource();
         sources[i].buffer = sample;
@@ -183,36 +183,36 @@ function buildGraph(bufferList) {
         // Connects all track volume nodes a single master volume node
         //trackVolumeNodes[i].connect(masterVolumeNode);
 		trackVolumeNodes[i].connect(distortionNodes[i]);
-		
-		
+
+
 		distortionNodes[i].connect(masterVolumeNode);
-		
+
         //masterVolumeNode.connect(distortion);
-		
+
 		//distortion.connect(filter);
-		
+
 		masterVolumeNode.connect(filter);
-		
+
 		// Note: the Web Audio spec is moving from constants to strings.
 		// filter.type = 'lowpass';
 		filter.type = filter.LOWPASS;
 		filter.frequency.value = 1000;
-		
+
 		// Connect the master volume to the speakers
 		filter.connect(context.destination);
 		filter.connect(analyser);
-		analyser.connect(javascriptNode);	
+		analyser.connect(javascriptNode);
 		javascriptNode.connect(context.destination);
-		
-				
+
+
         // On active les boutons start et stop
         samples = sources;
-    });	
-	
-	
+    });
+
+
 	//alert(ctx);
 	//alert(context);
-	
+
 }
 
 // ######### SONGS
@@ -273,17 +273,14 @@ function loadTrackList(songName) {
     resizeSampleCanvas(songtracks.instruments.length);
     tracks = songtracks.urls;
     loadAllSoundSamples(tracks);
-
-
-
 }
 
 function getMousePos(canvas, evt) {
     // get canvas position
     var obj = canvas;
-    var top = 0;  
+    var top = 0;
     var left = 0;
- 
+
     while (obj && obj.tagName != 'BODY') {
         top += obj.offsetTop;
         left += obj.offsetLeft;
@@ -315,7 +312,6 @@ function animateTime() {
         currentTime = context.currentTime;
         var delta = currentTime - lastTime;
 
-
         var totalTime;
 
         frontCtx.clearRect(0, 0, canvas.width, canvas.height);
@@ -325,7 +321,7 @@ function animateTime() {
         //console.log("dans animate");
 
         // at least one track has been loaded
-        if (buffers[0] != undefined) {
+        if (buffers[0] !== undefined) {
 
             var totalTime = buffers[0].duration;
             var x = elapsedTimeSinceStart * canvas.width / totalTime;
@@ -359,7 +355,7 @@ function drawSampleImage(imageURL, trackNumber, trackName) {
         ctx.font = '14pt Arial';
         ctx.fillStyle = 'white';
         ctx.fillText(trackName, x + 10, y + 20);
-    }
+    };
     image.src = imageURL;
 }
 
@@ -387,15 +383,15 @@ function playAllTracks(startTime) {
 // part of the song to another one, i.e. when we click the mouse on the sample graph
 function playFrom(startTime) {
   // Read current master volume slider position and set the volume
-  setMasterVolume()
-  
+  setMasterVolume();
+
 	samples.forEach(function(s) {
 		// First parameter is the delay before playing the sample
 		// second one is the offset in the song, in seconds, can be 2.3456
 		// very high precision !
         s.start(0, startTime);
-    })
-	
+    });
+
 	/**
 	 *
 	 * Auteur: Benjamin
@@ -403,12 +399,9 @@ function playFrom(startTime) {
 	 *
 	**/
 	javascriptNode.onaudioprocess = function () {
-	
 		draw(analyser);
+	};
 
-	}
-	
-	
     buttonPlay.disabled = true;
     buttonStop.disabled = false;
     buttonPause.disabled = false;
@@ -420,7 +413,6 @@ function playFrom(startTime) {
     console.log("start all tracks startTime =" + startTime);
     lastTime = context.currentTime;
     paused = false;
-		
 }
 
 function stopAllTracks() {
@@ -428,13 +420,13 @@ function stopAllTracks() {
 		// destroy the nodes
         s.stop(0);
     });
-	
+
 	//masterVolumeNode.disconect(0);
 	//distortion.disconnet(0);
 	filter.disconnect(0);
 	//analyser.disconnect(0);
 	//javascriptNode.disconnect(0);
-		
+
     buttonStop.disabled = true;
     buttonPause.disabled = true;
     buttonPlay.disabled = false;
@@ -451,15 +443,13 @@ function pauseAllTracks() {
 			// destroy the nodes
             s.stop(0);
         });
-		
+
 		//masterVolumeNode.disconect(0);
 		//distortion.disconnet(0);
 		filter.disconnect(0);
 		//analyser.disconnect(0);
 		//javascriptNode.disconnect(0);
-		
-		
-		
+
         paused = true;
         buttonPause.innerHTML = "Resume";
 		buttonDistortion.disabled = true;
@@ -476,17 +466,16 @@ function pauseAllTracks() {
 
 function setMasterVolume() {
 
-   var fraction = parseInt(masterVolumeSlider.value) / parseInt(masterVolumeSlider.max);
+var fraction = parseInt(masterVolumeSlider.value) / parseInt(masterVolumeSlider.max);
     // Let's use an x*x curve (x-squared) since simple linear (x) does not
     // sound as good.
-    if( masterVolumeNode != undefined)
-        masterVolumeNode.gain.value = fraction * fraction;
+if( masterVolumeNode !== undefined)
+    masterVolumeNode.gain.value = fraction * fraction;
 }
 
 function changeMasterVolume() {
    setMasterVolume();
 }
-
 
 function muteUnmuteTrack(trackNumber) {
 // AThe mute / unmute button
@@ -498,9 +487,7 @@ function muteUnmuteTrack(trackNumber) {
         trackVolumeNodes[trackNumber].gain.value = 1;
         b.innerHTML = "Mute";
     }
-
 }
-
 
 /* PARTIE FILTER */
 
@@ -523,8 +510,6 @@ function changeGain(gainVal) {
 }
 
 function changeEffect(name) {
-
-	//alert(name);
 	document.getElementById('gainRangeTest').style.display = 'none';
 	document.getElementById('txtGain').style.display = 'none';
 	document.getElementById('valGain').style.display = 'none';
@@ -533,16 +518,16 @@ function changeEffect(name) {
 	document.getElementById('valQuality').style.display = 'inherit';
 
     if (name == "lowpass"){
-		filter.type = name
+		filter.type = name;
 		//PAS DE GAIN
 	}else if (name == "highpass"){
-		filter.type = name
+		filter.type = name;
 		//PAS DE GAIN
 	}else if (name == "bandpass"){
-		filter.type = name
+		filter.type = name;
 		//PAS DE GAIN
 	}else if (name == "lowshelf"){
-		filter.type = name
+		filter.type = name;
 		//PAS DE QUALITE
 		document.getElementById('qualityRangeTest').style.display = 'none';
 		document.getElementById('txtQuality').style.display = 'none';
@@ -551,7 +536,7 @@ function changeEffect(name) {
 		document.getElementById('txtGain').style.display = 'inherit';
 		document.getElementById('valGain').style.display = 'inherit';
 	}else if (name == "highshelf"){
-		filter.type = name
+		filter.type = name;
 		//PAS DE QUALITE
 		document.getElementById('qualityRangeTest').style.display = 'none';
 		document.getElementById('txtQuality').style.display = 'none';
@@ -560,49 +545,46 @@ function changeEffect(name) {
 		document.getElementById('txtGain').style.display = 'inherit';
 		document.getElementById('valGain').style.display = 'inherit';
 	}else if (name == "peaking"){
-		filter.type = name
+		filter.type = name;
 		document.getElementById('gainRangeTest').style.display = 'inherit';
 		document.getElementById('txtGain').style.display = 'inherit';
 		document.getElementById('valGain').style.display = 'inherit';
 	}else if (name == "notch"){
-		filter.type = name
+		filter.type = name;
 		//PAS DE GAIN
 	}else if (name == "allpass"){
-		filter.type = name
+		filter.type = name;
 		//PAS DE GAIN
 	}
-
 }
 
 function disableFilter(){
 	alert('Non Implémenté!');
 }
 
-
-
 /* PARTIE SPECTRUM */
 
 function draw(analyser) {
     var canvas, context2, width, height, barWidth, barHeight, barSpacing, frequencyData, barCount, loopStep, i, hue;
-	
+
     canvas = $('canvas')[1];
 	context2 = canvas.getContext('2d');
-	
+
     width = canvas.width;
     height = canvas.height;
     barWidth = 10;
     barSpacing = 2;
- 
+
     context2.clearRect(0, 0, width, height);
     frequencyData = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(frequencyData);
-	
+
     barCount = Math.round(width / (barWidth + barSpacing));
     loopStep = Math.floor(frequencyData.length / barCount);
- 
+
     for (i = 0; i < barCount; i++) {
-	
-        barHeight = frequencyData[i * loopStep];		
+
+        barHeight = frequencyData[i * loopStep];
         hue = parseInt(120 * (1 - (barHeight / 255)), 10);
         context2.fillStyle = 'hsl(' + hue + ',75%,50%)';
         context2.fillRect(((barWidth + barSpacing) * i) + (barSpacing / 2), height, barWidth - barSpacing, -barHeight);
@@ -629,15 +611,12 @@ function makeDistortionCurve(amount) {
 }
 
 function makeDistortion(amount,delay,numInstru) {
-	
 	//alert(amount+":"+delay+":"+numInstru);
-	
 	//alert(distortion.oversample);
+	if(parseInt(delay) === 0){
 
-	if(parseInt(delay) == 0){
-		
 		distortionNodes[parseInt(numInstru)].curve = makeDistortionCurve(parseInt(amount));
-		if(amount != 0){
+		if(amount !== 0){
 			distortionNodes[parseInt(numInstru)].oversample = '4x';
 		}else{
 			distortionNodes[parseInt(numInstru)].oversample = 'none';
@@ -646,8 +625,8 @@ function makeDistortion(amount,delay,numInstru) {
 		distortionNodes[parseInt(numInstru)].curve = makeDistortionCurve(parseInt(amount));
 		distortionNodes[parseInt(numInstru)].oversample = '4x';
 
-		setTimeout(function(){ 
-			makeDistortion(0,0,parseInt(numInstru));
+		setTimeout(function(){
+			makeDistortion(0, 0, parseInt(numInstru));
 		}, parseInt(delay));
 	}
 }

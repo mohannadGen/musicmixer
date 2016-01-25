@@ -31,49 +31,39 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
                         return;
                     }
                     loader.bufferList[index] = buffer;
-					
+
 					tmpBuffer = buffer;
-					
+
 					//alert(buffer);
 					//alert(loader.bufferList[index]);
-					
+
                     console.log("In bufferLoader.onload bufferList size is " + loader.bufferList.length + " index =" + index);
                     if (++loader.loadCount == loader.urlList.length){
                         loader.onload(loader.bufferList);
 					}
-					
-					
-					
-					
-					
+
 					/**
 					*	POUR DESSINER LES COURBES
 					*	@see drawTrack()
 					**/
 					drawTrack(tmpBuffer,nbInstrumentsMusique,index);
-					
-					
-					
-					
                 },
                 function(error) {
                     console.error('decodeAudioData error', error);
                 }
         );
-		  
-
-    }
+    };
 
     request.onprogress = function(e) {
         //console.log("loaded : " + e.loaded + " total : " + e.total);
+    };
 
-    }
     request.onerror = function() {
         alert('BufferLoader: XHR error');
-    }
+    };
 
     request.send();
-}
+};
 
 
 
@@ -87,7 +77,7 @@ BufferLoader.prototype.load = function() {
     for (var i = 0; i < this.urlList.length; ++i){
         this.loadBuffer(this.urlList[i], i);
 	}
-		
+
 }
 
 
@@ -104,19 +94,17 @@ BufferLoader.prototype.load = function() {
 *	POUR DESSINER LES COURBES
 *	@see loadBuffer()
 **/
-function drawTrack(decodedBuffer,nb,nbI){	
+function drawTrack(decodedBuffer,nb,nbI){
 	//alert("decodedBuffer ="+decodedBuffer);
 	//alert("nb ="+nb);
 	//alert("nbI ="+nbI);
-	
+
 	//var canvas = document.getElementById('canvasFront');
 	var canvas = document.getElementById('myCanvas');
-	
-	waveformDrawer.init(decodedBuffer, canvas, 'green');  
+
+	waveformDrawer.init(decodedBuffer, canvas, 'green');
 	// First parameter = Y position (top left corner)
 	// second = height of the sample drawing
 	waveformDrawer.drawWave((((canvas.height/nb)*(nbI))+(canvas.height/nb)*0.2), ((canvas.height/nb)-(canvas.height/nb)*0.4));
 	//waveformDrawer.drawWave(0, canvas.height);
-}  
-
-
+}

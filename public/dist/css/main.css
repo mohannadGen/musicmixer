@@ -1,5 +1,5 @@
 body {
-    padding-top: 15px;
+    padding-top: 60px;
 }
 
 canvas {
@@ -8,11 +8,19 @@ canvas {
 
 #myCanvas {
     background: black;
+    z-index: 1;
+    position: absolute;
+}
+
+#canvasFront{
+    z-index: 2;
+    position: absolute;
 }
 
 .sample {
     border: solid white 1px;
     background: black;
+    position: absolute;
 }
 
 .rfilter {

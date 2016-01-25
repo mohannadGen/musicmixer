@@ -6,7 +6,6 @@ function WaveformDrawer() {
     this.displayHeight;
     this.sampleStep =  10;
     this.color = 'black';
-    //test
 
     this.init = function(decodedAudioBuffer, canvas, color) {
 		this.decodedAudioBuffer = decodedAudioBuffer;
@@ -18,7 +17,7 @@ function WaveformDrawer() {
 
         // Initialize the peaks array from the decoded audio buffer and canvas size
         this.getPeaks();
-    }
+    };
 
     this.max = function max(values) {
         var max = -Infinity;
@@ -27,21 +26,21 @@ function WaveformDrawer() {
             if (val > max) { max = val; }
         }
         return max;
-    }
+    };
+
     // Fist parameter : wjere to start vertically in the canvas (useful when we draw several
     // waveforms in a single canvas)
     // Second parameter = height of the sample
     this.drawWave = function(startY, height) {
-		
 		document.getElementById('myCanvas').style.backgroundColor = 'black';
-		
+
         var ctx = this.canvas.getContext('2d');
         ctx.save();
         ctx.translate(0, startY);
 
         //ctx.fillStyle = this.color;
         //ctx.strokeStyle = this.color;
-		
+
 		ctx.fillStyle = 'purple';
         ctx.strokeStyle = 'purple';
 
@@ -55,10 +54,9 @@ function WaveformDrawer() {
         console.log("drawing from 0, " + halfH + " to " + width + ", " + halfH);
         ctx.stroke();
 
-
         ctx.beginPath();
         ctx.moveTo(0, halfH);
-       
+
         for (var i = 0; i < width; i++) {
             var h = Math.round(this.peaks[i] * coef);
             ctx.lineTo(i, halfH + h);
@@ -75,9 +73,9 @@ function WaveformDrawer() {
         ctx.lineTo(width, halfH);
 
         ctx.fill();
-        
+
         ctx.restore();
-        }
+    };
 
     // Builds an array of peaks for drawing
     // Need the decoded buffer
@@ -120,5 +118,5 @@ function WaveformDrawer() {
                 }
             }
         }
-    }
+    };
 }

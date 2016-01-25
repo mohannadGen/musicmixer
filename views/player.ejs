@@ -1,5 +1,5 @@
 <%- include header %>
-<div class="row">
+<div class="row" style="overflow: hidden">
     <!-- ================================= [ START ] ================================= -->
     <!-- MODIFS DE BENOU -->
     <div class="col-md-3">
@@ -106,16 +106,14 @@
 
     function loadComments(){
         $.get("/play/<%= songname %>/comments", function(data){
-            console.log("data:" + data + " -- " + data.length);
             $("#commentsList").empty();
             for(var i = 0; i < data.length; i++){
                 var comment = data[i];
-                console.log("Comment:" + comment);
                 $("#commentsList").append(
                     "<blockquote><p>"
                     + comment['body']
                     + "</p><footer>"
-                    + comment['user']
+                    + comment['username']
                     + " <strong>at</strong> <cite title=\"source title\">"
                     + comment['createdAt']
                     + "</cite></footer></blockquote>"
@@ -135,9 +133,12 @@
     }
 
     $(document).ready(function(){
-        console.log("Ready now");
+        init();
         loadComments();
     })
 
 </script>
+<script src="/js/buffer-loader.js"></script>
+<script src="/js/sound.js"></script>
+<script src="/js/waveformDrawer.js"></script>
 <%- include footer  %>
