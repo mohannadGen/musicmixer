@@ -1,127 +1,143 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <title>Web Audio API: Simple load + play</title>
-    <script src="/js/libs/jquery-1.9.0/jquery.min.js"></script>
-    <script type="application/javascript">
-        var str ="<%=stracks%>" ;
-        str = str.replace(new RegExp("&quot;", 'g'),'"');
-        songtracks = JSON.parse(str);
-    </script>
-    <script src="/js/buffer-loader.js"></script>
-    <script src="/js/sound.js"></script>
-    <script src="/js/waveformDrawer.js"></script>
-
-    <script>
-        nbInstrumentsMusique = 0;
-    </script>
-
-    <style>
-        canvas {
-            border: solid 2Px black;
-            position: absolute;
-            top: 235px;
-            left: 300px;
-        }
-
-        #myCanvas {
-            background: black;
-        }
-
-        .sample {
-            border: solid white 1px;
-            background: black;
-        }
-
-        .rfilter {
-            width : 60px;
-        }
-    </style>
+<%- include header %>
+<div class="row">
+    <!-- ================================= [ START ] ================================= -->
+    <!-- MODIFS DE BENOU -->
+    <div class="col-md-3">
+        <!-- ================================= [  END  ] ================================= -->
+        <button id="bplay" onclick="playAllTracks(0);" disabled>Start</button>
+        <button id="bpause" onclick="pauseAllTracks();" disabled>Pause</button>
+        <button id="bstop" onclick="stopAllTracks();" disabled>Stop</button>
+        <br/>Master Volume :<br/><input type="range" id="masterVolume" min="0" max="100" value="100" oninput="changeMasterVolume(this);">
+        <div id="songs"></div>
 
 
-    <!-- ================================= [  END  ] ================================= -->
-</head>
+        <div id="tracks">
+            <% for(var i=0; i<ttracks.instruments.length; i++) {%>
+                <%=ttracks.instruments[i].name%>
+                <button id="mute<%=i%>" onclick="muteUnmuteTrack(<%=i%>);" >mute</button><br/>
+            <%}%>
+        </div>
+    </div>
 
-<body onload="init();">
-<p>Test Multi Tracker Web AUdio</p>
-</br>
-<!-- ================================= [ START ] ================================= -->
-<!-- MODIFS DE BENOU -->
-<div style=" position: absolute;top: 150px; left: 20px;">
-    <!-- ================================= [  END  ] ================================= -->
-    <button id="bplay" onclick="playAllTracks(0);" disabled>Start</button>
-    <button id="bpause" onclick="pauseAllTracks();" disabled>Pause</button>
-    <button id="bstop" onclick="stopAllTracks();" disabled>Stop</button>
-    <br/>Master Volume :<br/><input type="range" id="masterVolume" min="0" max="100" value="100" oninput="changeMasterVolume(this);">
-    <div id="songs"></div>
+    <div class="col-md-5">
+        <canvas id="myCanvas" width="500" height="200"></canvas>
+        <canvas class="sample" id="spectre" width="500" height="80"></canvas>
+    </div>
 
+    <div class="col-md-3">
 
-    <div id="tracks">
-        <% for(var i=0; i<ttracks.instruments.length; i++) {%>
-            <%=ttracks.instruments[i].name%>
-            <button id="mute<%=i%>" onclick="muteUnmuteTrack(<%=i%>);" >mute</button><br/>
-        <%}%>
+        <spane id="txtfilter">Filter :</spane>
+        <button id="buttonFilter" onclick="disableFilter();" disabled>Désactiver le filtre</button>
+        <select id='filterTest' onchange="changeEffect(document.getElementById('filterTest').value);">
+            <option value="lowpass" selected="selected">Low Pass</option>
+            <option value="highpass">High Pass</option>
+            <option value="bandpass">Band Pass</option>
+            <option value="lowshelf">Low Shelf</option>
+            <option value="highshelf">High Shelf</option>
+            <option value="peaking">Peaking</option>
+            <option value="notch">Notch</option>
+            <option value="allpass">All Pass</option>
+        </select><br/>
+
+        <spane id="txtFrequency">Frequency :</span>  <spane id="txtQuality">Quality :</spane>  <spane id="txtGain">Gain :</spane>
+            <spane>Distortion :</span>
+                <br/>
+                <div class="row">
+                    <div class="col-md-3">
+                        <input class = "rfilter" type="range" id="frequencyRangeTest" min="0" max="3000" value="1000"
+                           oninput="changeFrequency(document.getElementById('frequencyRangeTest').value);" style=" writing-mode: bt-lr;
+                        -webkit-appearance: slider-vertical;">
+                    </div>
+                    <div class="col-md-3">
+                        <input  class = "rfilter" type="range" id="qualityRangeTest" min="0" max="100" value="0"
+                            oninput="changeQuality(document.getElementById('qualityRangeTest').value);" style=" writing-mode: bt-lr;
+                        -webkit-appearance: slider-vertical;">
+                    </div>
+                    <div class="col-md-3">
+                        <input  class = "rfilter" type="range" id="gainRangeTest" min="0" max="100" value="4" oninput="changeGain(document.getElementById('gainRangeTest').value);" style=" writing-mode: bt-lr;
+                -webkit-appearance: slider-vertical;">
+                    </div>
+                    <div class="col-md-3">
+                        <input class = "rfilter" type="range" id="distortionRangeTest" min="0" max="2000" value="0" oninput="changeDistortion(document.getElementById('distortionRangeTest').value);" style=" writing-mode: bt-lr;
+                -webkit-appearance: slider-vertical;">
+                    </div>
+                </div>
+                <br/>
+                <spane id="valFrequency"> 1000/3000 </spane>
+                <spane id="valQuality" > 	&nbsp;	&nbsp;	&nbsp;0/100 </spane>
+                <spane id="valGain" >	&nbsp;	&nbsp;	&nbsp; 4/100 </spane>
+                <spane id="valDistortion"> &nbsp;	&nbsp;	&nbsp;0/2000</spane>
+                <br/>
+
+                <spane id="txtDistortion"> dilay/ms </spane>
+                <input type="text" id="delayDistortion" style="width:50px">
+                <spane id="txtDistortionNum"> no. instruments</spane>
+                <input type="text" id="numInstruDistortion" style="width:50px">
+                <br/><br/>
+                <button id="buttonDistortion" onclick="makeDistortion(document.getElementById('distortionRangeTest').value,document.getElementById('delayDistortion').value,document.getElementById('numInstruDistortion').value);" disabled>Faire une distorsion</button>
+
     </div>
 </div>
 
-<canvas id="myCanvas" width="500" height="200"></canvas>
-<canvas class="sample" id="spectre" width="500" height="80" style=" position: absolute;top: 155px; left: 300px;  border: solid 2Px;"></canvas>
-
-<div style=" position: absolute;top: 150px; left: 850px;">
-
-    <spane id="txtfilter">Filter :</spane>
-    <button id="buttonFilter" onclick="disableFilter();" disabled>Désactiver le filtre</button>
-    <select id='filterTest' onchange="changeEffect(document.getElementById('filterTest').value);">
-        <option value="lowpass" selected="selected">Low Pass</option>
-        <option value="highpass">High Pass</option>
-        <option value="bandpass">Band Pass</option>
-        <option value="lowshelf">Low Shelf</option>
-        <option value="highshelf">High Shelf</option>
-        <option value="peaking">Peaking</option>
-        <option value="notch">Notch</option>
-        <option value="allpass">All Pass</option>
-    </select><br/>
-
-    <spane id="txtFrequency">Frequency :</span>  <spane id="txtQuality">Quality :</spane>  <spane id="txtGain">Gain :</spane>
-        <spane>Distortion :</span>
-            <br/>
-            <input class = "rfilter" type="range" id="frequencyRangeTest" min="0" max="3000" value="1000"
-                   oninput="changeFrequency(document.getElementById('frequencyRangeTest').value);" style=" writing-mode: bt-lr;
-                -webkit-appearance: slider-vertical;">
-            <input  class = "rfilter" type="range" id="qualityRangeTest" min="0" max="100" value="0"
-                    oninput="changeQuality(document.getElementById('qualityRangeTest').value);" style=" writing-mode: bt-lr;
-                -webkit-appearance: slider-vertical;">
-            <input  class = "rfilter" type="range" id="gainRangeTest" min="0" max="100" value="4" oninput="changeGain(document.getElementById('gainRangeTest').value);" style=" writing-mode: bt-lr;
-        -webkit-appearance: slider-vertical;">
-            <input class = "rfilter" type="range" id="distortionRangeTest" min="0" max="2000" value="0" oninput="changeDistortion(document.getElementById('distortionRangeTest').value);" style=" writing-mode: bt-lr;
-        -webkit-appearance: slider-vertical;">
-            <br/>
-            <spane id="valFrequency"> 1000/3000 </spane>
-            <spane id="valQuality" > 	&nbsp;	&nbsp;	&nbsp;0/100 </spane>
-            <spane id="valGain" >	&nbsp;	&nbsp;	&nbsp; 4/100 </spane>
-            <spane id="valDistortion"> &nbsp;	&nbsp;	&nbsp;0/2000</spane>
-            <br/>
-
-            <spane id="txtDistortion"> dilay/ms </spane>
-            <input type="text" id="delayDistortion" style="width:50px">
-            <spane id="txtDistortionNum"> no. instruments</spane>
-            <input type="text" id="numInstruDistortion" style="width:50px">
-            <br/><br/>
-            <button id="buttonDistortion" onclick="makeDistortion(document.getElementById('distortionRangeTest').value,document.getElementById('delayDistortion').value,document.getElementById('numInstruDistortion').value);" disabled>Faire une distorsion</button>
-
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <h1>Discuss the song</h1>
+    </div>
+    <div class="col-md-10 col-md-offset-1">
+          <div class="form-group">
+            <label for="commentArea">Comment</label>
+            <textarea class="form-control" id="commentArea" placeholder="Enter your comment..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-default" onclick="saveComment()">Post Comment!</button>
+    </div>
+</div>
+<div class="row">
+    <div id="commentsList" class="col-md-10 col-md-offset-1">
+    </div>
 </div>
 
+<script>
 
+    var str ="<%=stracks%>" ;
+    str = str.replace(new RegExp("&quot;", 'g'),'"');
+    songtracks = JSON.parse(str);
 
+    nbInstrumentsMusique = 0;
 
+    function loadComments(){
+        $.get("/play/<%= songname %>/comments", function(data){
+            console.log("data:" + data + " -- " + data.length);
+            $("#commentsList").empty();
+            for(var i = 0; i < data.length; i++){
+                var comment = data[i];
+                console.log("Comment:" + comment);
+                $("#commentsList").append(
+                    "<blockquote><p>"
+                    + comment['body']
+                    + "</p><footer>"
+                    + comment['user']
+                    + " <strong>at</strong> <cite title=\"source title\">"
+                    + comment['createdAt']
+                    + "</cite></footer></blockquote>"
+                );
+            }
+        })
+    }
 
+    function saveComment(){
+        $.post("/play/<%= songname %>/comments",{
+            songname: "<%= songname %>",
+            comment: $("#commentArea").val()
+        }).done(function(data){
+            loadComments();
+            $("#commentArea").val("");
+        })
+    }
 
+    $(document).ready(function(){
+        console.log("Ready now");
+        loadComments();
+    })
 
-
-
-</body>
-
-</html>
+</script>
+<%- include footer  %>

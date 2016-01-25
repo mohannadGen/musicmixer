@@ -34,5 +34,6 @@ app.use(flash());
 require('./app/routes.js')(app,passport);
 // runnig our app ==================================================
 
-app.listen(port);
-console.log('Music mix server is up and runnig in port:' + port);
+app.listen(port, function(){
+    console.log('Music mix server is up and running at port:' + port);
+});

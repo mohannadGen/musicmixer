@@ -1,79 +1,43 @@
-<!-- views/profile.ejs -->
-<!doctype html>
-<html>
-<head>
-    <title>Node Authentication</title>
-    <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body        { padding-top:10px; word-wrap:break-word; }
-    </style>
-</head>
-<body>
-<div>
+<%- include header %>
     <div>
-        <div class="row">
-            <div>
-                <div class="well" >
-                    <h3><span class="fa fa-user"></span> <%= user.local.first %> <%= user.local.last %></h3>
-                    <p>
-                        <strong>email</strong>: <%= user.local.email %>
-                        <span class="pull-right">
-                            <a href="/shares" class="btn btn-primary">Shares</a>
-                            <a href="/logout" class="btn btn-primary"> Logout</a>
-                        </span>
-                    </p>
-                   <div></div>
+        <div class="container">
+            <table id="mytable" class="table table-bordred table-striped center-block" style="width:50%">
+                <thead>
+                <th >Song Name</th>
+                <th class ="col-md-1">Delete</th>
+                <th class ="col-md-1">Play</th>
+                <th class ="col-md-1">Share</th>
+                </thead>
+                <tbody>
+
+                <% for(var i=0; i<songs.length; i++) { %>
+                <tr>
+                    <td><%= songs[i]%></td>
+                    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><a href="/<%= songs[i]%>/delete" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></a></p></td>
+                    <td><p data-placement="top" data-toggle="tooltip" title="Play"><a href="/play/<%= songs[i]%>" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-play"></span></a></p></td>
+                    <td><p data-placement="top" data-toggle="tooltip" title="Share"><a href="/<%= songs[i]%>/share" class="btn btn-danger btn-xs" data-title="Share" data-toggle="modal" data-target="#share" ><span class="glyphicon glyphicon-share"></span></a></p></td>
+                </tr>
+                <% } %>
+
+                </tbody>
+            </table>
+            <div class="col-sm-6 col-sm-offset-3">
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Song name</label>
+                    <input type="text" class="form-control" name="songname" required>
                 </div>
+                <div class="form-group">
+                    <input type="file" accept="audio/*" name="upl" multiple/>
+                </div>
+                <div class="form-group">
+                     <input type="submit" value="Upload" class="btn btn-info" />
+                </div>
+            </form>
+                <% if (message.length > 0) { %>
+                <div class="col-sm-8 col-sm-offset-4 alert alert-danger"><%= message %></div>
+                <% } %>
             </div>
-
-        </div>
-
-    </div>
-    <div class="container">
-        <table id="mytable" class="table table-bordred table-striped center-block" style="width:50%">
-            <thead>
-            <th >Song Name</th>
-            <th class ="col-md-1">Delete</th>
-            <th class ="col-md-1">Play</th>
-            <th class ="col-md-1">Share</th>
-            </thead>
-            <tbody>
-
-            <% for(var i=0; i<songs.length; i++) {%>
-            <tr>
-                <td><%= songs[i]%></td>
-                <td><p data-placement="top" data-toggle="tooltip" title="Delete"><a href="/<%= songs[i]%>/delete" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></a></p></td>
-                <td><p data-placement="top" data-toggle="tooltip" title="Play"><a href="/play/<%= songs[i]%>" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-play"></span></a></p></td>
-                <td><p data-placement="top" data-toggle="tooltip" title="Share"><a href="/<%= songs[i]%>/share" class="btn btn-danger btn-xs" data-title="Share" data-toggle="modal" data-target="#share" ><span class="glyphicon glyphicon-share"></span></a></p></td>
-            </tr>
-            <% } %>
-
-            </tbody>
-        </table>
-        <div class="col-sm-6 col-sm-offset-3">
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label>Song name</label>
-                <input type="text" class="form-control" name="songname" required>
-            </div>
-            <div class="form-group">
-                <input type="file" accept="audio/*" name="upl" multiple/>
-            </div>
-            <div class="form-group">
-                 <input type="submit" value="Upload" class="btn btn-info" />
-            </div>
-        </form>
-            <% if (message.length > 0) { %>
-            <div class="col-sm-8 col-sm-offset-4 alert alert-danger"><%= message %></div>
-            <% } %>
         </div>
     </div>
-
-    <!-- <script src="app.js" async="true"></script> -->
-
-</div>
-</body>
-</html>
+<%- include footer %>

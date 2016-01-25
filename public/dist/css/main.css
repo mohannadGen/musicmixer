@@ -1,0 +1,20 @@
+body {
+    padding-top: 15px;
+}
+
+canvas {
+    border: solid 2px black;
+}
+
+#myCanvas {
+    background: black;
+}
+
+.sample {
+    border: solid white 1px;
+    background: black;
+}
+
+.rfilter {
+    width : 60px;
+}

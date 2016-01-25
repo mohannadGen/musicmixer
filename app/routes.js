@@ -1,3 +1,4 @@
+/* jshint node: true */
 var sys = require('sys');
 var fs = require('fs');
 var path = require('path');
@@ -5,12 +6,11 @@ var bytes = require('bytes');
 var multer  = require('multer');
 var bodyParser = require('body-parser');
 
+var urlencodedParser = bodyParser.urlencoded({ extended: true });
+
 var usersController = require('./controllers/usersController');
-var sharesController = require('./controllers/sharesController');
+var songsController = require('./controllers/songsController');
 var playerController = require('./controllers/playerController');
-
-
-
 
 module.exports = function(app,passport){
     //====================== user routes ==========================
@@ -26,23 +26,25 @@ module.exports = function(app,passport){
     //================= file upload/delete routes =================
     //=============================================================
     app.post('/uploadFiles', usersController.loadsong);
-    app.get('/:song/delete',isLoggedIn,usersController.deletesong);
+    app.get('/:song/delete', isLoggedIn, usersController.deletesong);
 
     //========================== Shares  ==========================
     //=============================================================
-    app.get('/:song/share',isLoggedIn,sharesController.createshare);
-    app.get('/shares',isLoggedIn,sharesController.getshare);
+    app.get('/:song/share',isLoggedIn, songsController.createshare);
+    app.get('/shares',isLoggedIn, songsController.getshare);
 
     //==================== player routes ===================
     //======================================================
-    app.get('/play/:song',isLoggedIn,playerController.playSong);
+    app.get("/play/:song/comments", playerController.loadComments);
+    app.post('/play/:song/comments', urlencodedParser, playerController.saveComment);
+
+    app.get('/play/:song', isLoggedIn, playerController.playSong);
     app.get(/\/play\/((\w|.)+)/, playerController.loadtracks);
 
 };
-
 
 function isLoggedIn(req,res,next){
     if(req.isAuthenticated())
         return next();
     res.redirect('/');
-};
+}

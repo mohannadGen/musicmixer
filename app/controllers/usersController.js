@@ -1,10 +1,10 @@
+/* jshint node: true */
 'use strict';
 
 var fs = require('fs');
 var path = require('path');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
-
 
 var getDirectories = function (srcpath) {
   return fs.readdirSync(srcpath).filter(function(file) {
@@ -26,7 +26,6 @@ var deleteFolderRecursive = function(path) {
   }
 };
 
-
 var parseFile = function(file, req) {
   var parsedFile = path.parse(file),
       fullUrl = req.protocol + '://' + req.get('host') + '/uploads/';
@@ -39,17 +38,15 @@ var parseFile = function(file, req) {
   };
 };
 
-
-
 exports.login = function(req,res){
-  res.render('login.ejs',{message:req.flash('loginMessage')});
-}
+  res.render('login.ejs', {message:req.flash('loginMessage')});
+};
 
 exports.loginpost = function(passport){
    return passport.authenticate('local-login', {
   successRedirect : '/profile',
   failureRedirect : '/login',
-  failureFlash : true})
+  failureFlash : true});
 };
 
 exports.signupget = function(req,res){
@@ -73,8 +70,6 @@ exports.logout = function(req,res){
   req.logout();
   res.redirect('/');
 };
-
-
 
 exports.loadsong = function (req, res) {
   var newPath = null,
@@ -108,8 +103,18 @@ exports.loadsong = function (req, res) {
 
 exports.deletesong = function(req,res){
   var songname = req.params.song;
-  var pp = __dirname + "/../../users/"+req.user._id+"/"+songname;
+  var pp = __dirname + "/../../users/" + req.user._id + "/" + songname;
   console.log(pp);
   deleteFolderRecursive(pp);
   res.redirect('/profile');
+};
+
+exports.getUsernameById = function(id){
+    User.findOne({_id: id}, function(err, user){
+        if(err) throw err;
+        if(user !== undefined && user !== null) {
+            console.log('HJer ' + user.local.username);
+            return user.local.username;
+        }
+    });
 };
