@@ -6,6 +6,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var songModel = require('../models/song.js');
+var helperCtrl = require('./helperController.js');
 
 exports.login = function(req,res){
   res.render('login.ejs', {message:req.flash('loginMessage')});
@@ -30,15 +31,9 @@ exports.signuppost = function(passport){
   });
 };
 
-var getDirectories = function (srcpath) {
-  return fs.readdirSync(srcpath).filter(function(file) {
-    return fs.statSync(path.join(srcpath, file)).isDirectory();
-  });
-};
-
-exports.getprofile = function(req,res){
-  var songslist = getDirectories( __dirname + "/../../users/"+req.user._id);
-  res.render('profile.ejs',{user:req.user,songs:songslist,message:req.flash('doublicateName')});
+exports.getprofile = function(req, res){
+  var songslist = helperCtrl.getDirectories( __dirname + "/../../users/" + req.user._id);
+  res.render('profile.ejs',{user: req.user, songs: songslist, message: req.flash('duplicateName')});
 };
 
 exports.logout = function(req,res){

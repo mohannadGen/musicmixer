@@ -12,6 +12,8 @@ var usersController = require('./controllers/usersController');
 var songsController = require('./controllers/songsController');
 var playerController = require('./controllers/playerController');
 
+var songModel = require('./models/song.js');
+
 module.exports = function(app,passport){
     //====================== user routes ==========================
     //=============================================================
@@ -38,12 +40,21 @@ module.exports = function(app,passport){
     app.get("/play/:song/comments", playerController.loadComments);
     app.post('/play/:song/comments', urlencodedParser, playerController.saveComment);
 
-    app.get('/play/:song', isLoggedIn, playerController.playSong);
+    app.get('/play/:song', isLoggedIn, isAllowedAccess, playerController.playSong);
     app.get(/\/play\/((\w|.)+)/, playerController.loadtracks);
 };
 
-function isLoggedIn(req,res,next){
+function isLoggedIn(req, res, next){
     if(req.isAuthenticated())
         return next();
     res.redirect('/');
+}
+
+function isAllowedAccess(request, response, next){
+    songModel.findOne({title: request.params.song}, function(err, song){
+        if(song.shared) return next();
+        if(String(song.user) == String(request.user._id)) return next();
+        // request.flash('duplicateName', "Sorry you are not allowed to access this song.");
+        response.redirect('/profile'/*, {message: request.flash('duplicateName')}*/);
+    });
 }
