@@ -24,27 +24,23 @@ exports.getshare = function(req, res){
 exports.loadsong = function (req, res) {
   var newPath = null,
       uploadedFileNames = [],
-      uploadedSounds,
-      uploadedSoundsCounter = 0;
-  var pp = __dirname + "/../../users/" + req.user._id + "/" + req.param("songname");
+      uploadedImages,
+      uploadedImagesCounter = 0;
+  var pp = __dirname + "/../../users/"+req.user._id+"/"+req.param("songname");
   try{
     fs.mkdirSync(pp);
   }catch (e){
-    var songslist = helperCtrl.getDirectories( __dirname + "/../../users/" + req.user._id);
-    req.flash('duplicateName', 'Duplicate song name');
-    return res.render('profile.ejs', {
-            user: req.user,
-            songs: songslist,
-            message: req.flash('duplicateName')
-        });
+    var songslist = helperCtrl.getDirectories( __dirname + "/../../users/"+req.user._id);
+    req.flash('doublicateName', 'Douplicate song name   ');
+    return res.render('profile.ejs',{user:req.user,songs:songslist,message:req.flash('doublicateName')});
   }
-  songModel.create({title: req.param("songname"), username:req.user.local.username, user: req.user, comments: []}, function(err, song){
+  songModel.create({title: req.param("songname"), username: req.user.local.username, user: req.user, comments: []}, function(err ,song){
      if(err) throw err;
   });
-  if(req.files && req.files.uploadedSounds) {
-    uploadedSounds = Array.isArray(req.files.uploadedSounds) ? req.files.uploadedSounds : [req.files.uploadedSounds];
+  if(req.files && req.files.uploadedImages) {
+    uploadedImages = Array.isArray(req.files.uploadedImages) ? req.files.uploadedImages : [req.files.uploadedImages];
 
-    uploadedSounds.forEach(function (value) {
+    uploadedImages.forEach(function (value) {
       console.log(value);
       newPath = pp +"/" + value.originalFilename;
       console.log(newPath);
@@ -52,9 +48,15 @@ exports.loadsong = function (req, res) {
 
       uploadedFileNames.push(helperCtrl.parseFile(newPath, req));
     });
+
+    //res.render('profile.ejs',{user:req.user,message:req.flash('doublicateName')});
     res.redirect('/profile');
   }
 };
+
+  // songModel.create({title: req.param("songname"), username:req.user.local.username, user: req.user, comments: []}, function(err, song){
+  //    if(err) throw err;
+  // });
 
 exports.deletesong = function(req,res){
   var songname = req.params.song;

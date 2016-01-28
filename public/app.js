@@ -1,3 +1,30 @@
+function initPage() {
+	onUploadForm();
+}
+
+function onUploadForm() {
+	var uploadForm = document.forms['ajaxUploadForm'];
+
+	uploadForm.onsubmit = function(event) {
+		event.preventDefault();
+		var formData = new FormData(),
+			uploadedImages = uploadForm['uploadedImages'].files;
+		for (var i = 0; i < uploadedImages.length; i++) {
+			formData.append('uploadedImages[]', uploadedImages[i]);
+		}
+		ajaxx(uploadForm.action, uploadForm.method, formData, appendImages);
+	};
+
+	function appendImages(responseText, status) {
+		var uploadedImagesContainer = document.getElementById('uploadedImages');
+
+		responseText['uploadedFileNames'].forEach(function(value) {
+			//uploadedImagesContainer.innerHTML += '<img src="/uploads/' + value.base + '" width="150" />';
+		});
+
+	}
+}
+
 // Common function to initialize XML Http Request object
 function getHttpRequestObject() {
 	// Define and initialize as false

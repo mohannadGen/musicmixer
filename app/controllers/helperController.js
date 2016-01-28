@@ -1,3 +1,6 @@
+/* jshint node: true */
+'use strict';
+
 var moment = require('moment');
 var fs = require('fs');
 var path = require('path');
@@ -5,6 +8,12 @@ var path = require('path');
 exports.timeConversion = function(unixTimestamp){
     var thisMoment = moment.unix(unixTimestamp);
     return thisMoment.format("dddd, MMMM Do YYYY, h:mm:ss a");
+};
+
+exports.getDirectories = function (srcpath) {
+  return fs.readdirSync(srcpath).filter(function(file) {
+    return fs.statSync(path.join(srcpath, file)).isDirectory();
+  });
 };
 
 exports.parseFile = function(file, req) {
@@ -15,14 +24,8 @@ exports.parseFile = function(file, req) {
     base: parsedFile.base,
     extension: parsedFile.ext.substring(1),
     url: fullUrl + parsedFile.base,
-    size: bytes(fs.statSync(file).size)
+    size: fs.statSync(file).size
   };
-};
-
-exports.getDirectories = function (srcpath) {
-  return fs.readdirSync(srcpath).filter(function(file) {
-    return fs.statSync(path.join(srcpath, file)).isDirectory();
-  });
 };
 
 exports.deleteFolderRecursive = function(path) {
@@ -30,7 +33,7 @@ exports.deleteFolderRecursive = function(path) {
     fs.readdirSync(path).forEach(function(file,index){
       var curPath = path + "/" + file;
       if(fs.lstatSync(curPath).isDirectory()) { // recurse
-        deleteFolderRecursive(curPath);
+        this.deleteFolderRecursive(curPath);
       } else { // delete file
         fs.unlinkSync(curPath);
       }

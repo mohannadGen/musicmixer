@@ -52,6 +52,7 @@ function isLoggedIn(req, res, next){
 
 function isAllowedAccess(request, response, next){
     songModel.findOne({title: request.params.song}, function(err, song){
+        console.log(song);
         if(song.shared) return next();
         if(String(song.user) == String(request.user._id)) return next();
         // request.flash('duplicateName', "Sorry you are not allowed to access this song.");
