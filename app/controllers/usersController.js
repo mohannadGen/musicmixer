@@ -32,8 +32,9 @@ exports.signuppost = function(passport){
 };
 
 exports.getprofile = function(req, res){
-  var songslist = helperCtrl.getDirectories( __dirname + "/../../users/" + req.user._id);
-  res.render('profile.ejs',{user: req.user, songs: songslist, message: req.flash('duplicateName')});
+  songModel.find({user: req.user._id}, function(err, songslist){
+      res.render('profile.ejs',{user: req.user, songs: songslist, message: req.flash('duplicateName')});
+  });
 };
 
 exports.logout = function(req,res){

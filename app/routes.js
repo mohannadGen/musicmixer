@@ -40,6 +40,9 @@ module.exports = function(app,passport){
     app.get("/play/:song/comments", playerController.loadComments);
     app.post('/play/:song/comments', urlencodedParser, playerController.saveComment);
 
+    app.get("/play/:song/ratings", playerController.loadRatings);
+    app.post('/play/:song/rating', urlencodedParser, playerController.saveRating);
+
     app.get('/play/:song', isLoggedIn, isAllowedAccess, playerController.playSong);
     app.get(/\/play\/((\w|.)+)/, playerController.loadtracks);
 };

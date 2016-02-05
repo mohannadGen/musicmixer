@@ -48,7 +48,6 @@ function getTrack(songname, callback) {
                     name: instrument,
                     sound: instrument + '.mp3'
                 });
-
                 track.urls.push(songname+'/'+instrument+'.mp3');
             }
             callback(track);
@@ -82,5 +81,44 @@ exports.loadComments = function(request, response){
     var songname = request.params.song;
     songModel.findOne({title: songname}, 'comments', function(err, song){
             response.send(_(song.comments).sortBy(['createdAt']).reverse());
+    });
+};
+
+exports.saveRating = function (request, response){
+    var body = request.body;
+    var rating = body.rating;
+    var songname = body.songname;
+    if(rating === undefined) response.end();
+    else {
+        songModel.findOne({title: songname} , function(err, song){
+            song.ratings = _.remove(song.ratings, function(x){
+                if(JSON.stringify(x.user) === JSON.stringify(request.user._id)){
+                    return false;
+                }
+                return true;
+            });
+            song.ratings.push({
+                rate: rating,
+                user: request.user,
+                username: request.user.local.username
+            });
+            song.save(function(){
+                response.end();
+            });
+        });
+    }
+};
+
+exports.loadRatings = function(request, response){
+    var songname = request.params.song;
+    var myRatings = [];
+    songModel.findOne({title: songname}, function(err, song){
+            for(var i = 0; i < _.size(song.ratings); i++){
+                if(JSON.stringify(song.ratings[i].user) === JSON.stringify(request.user._id)){
+                    myRatings.push(song.ratings[i].rate);
+                }
+            }
+            myRatings.push(song.avgRating);
+            response.json(myRatings);
     });
 };

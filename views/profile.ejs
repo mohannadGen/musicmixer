@@ -2,7 +2,8 @@
 <div class="container">
     <table id="mytable" class="table table-bordred table-striped center-block" style="width:50%">
         <thead>
-        <th >Song Name</th>
+        <th >song name</th>
+        <th >Rating</th>
         <th class ="col-md-1">Delete</th>
         <th class ="col-md-1">Play</th>
         <th class ="col-md-1">Share</th>
@@ -11,7 +12,8 @@
 
         <% for(var i=0; i<songs.length; i++) {%>
         <tr>
-            <td><%= songs[i]%></td>
+            <td><%= songs[i].title %></td>
+            <td><%= songs[i].avgRating %></td>
             <td><p data-toggle="tooltip" title="Delete"><a href="/<%= songs[i]%>/delete" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></a></p></td>
             <td><p data-toggle="tooltip" title="Play"><a href="/play/<%= songs[i]%>" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-play"></span></a></p></td>
             <td><p data-toggle="tooltip" title="Share"><a href="/<%= songs[i]%>/share" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-share"></span></a></p></td>
@@ -40,7 +42,6 @@
 </div>
 
 <script src="app.js" async="true"></script>
-
 
 </div>
 <%- include footer %>
