@@ -1,47 +1,45 @@
 <%- include header %>
-<div class="container">
-    <table id="mytable" class="table table-bordred table-striped center-block" style="width:50%">
-        <thead>
-        <th >song name</th>
-        <th >Rating</th>
-        <th class ="col-md-1">Delete</th>
-        <th class ="col-md-1">Play</th>
-        <th class ="col-md-1">Share</th>
-        </thead>
-        <tbody>
+<div class="page-header">
+      <h1>Profile<small> View information about you accessible by others</small></h1>
+</div>
 
-        <% for(var i=0; i<songs.length; i++) {%>
-        <tr>
-            <td><%= songs[i].title %></td>
-            <td><%= songs[i].avgRating %></td>
-            <td><p data-toggle="tooltip" title="Delete"><a href="/<%= songs[i].title %>/delete" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></a></p></td>
-            <td><p data-toggle="tooltip" title="Play"><a href="/play/<%= songs[i].title %>" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-play"></span></a></p></td>
-            <td><p data-toggle="tooltip" title="Share"><a href="/<%= songs[i].title %>/share" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-share"></span></a></p></td>
-        </tr>
-        <% } %>
-
-        </tbody>
-    </table>
-    <div class="col-sm-6 col-sm-offset-3">
-    <form action="/uploadFiles", method="post", enctype="multipart/form-data" name="ajaxUploadForm">
-        <div class="form-group">
-            <label>Song name</label>
-            <input type="text" class="form-control" name="songname" required>
-        </div>
-        <div class="form-group">
-            <input type="file" multiple="multiple" accept="audio/*" name="uploadedImages"/>
-        </div>
-        <div class="form-group">
-             <input type="submit" value="Upload" class="btn btn-info" />
-        </div>
-    </form>
-        <% if (message.length > 0) { %>
-        <div class="col-sm-8 col-sm-offset-4 alert alert-danger"><%= message %></div>
-        <% } %>
+<div class="row">
+    <%= user %>
+    <div class="col-md-6">
+        <form>
+          <div class="form-group">
+            <label>Full Name</label>
+            <%= user.fullname %>
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <%= user.local.username %>
+          </div>
+          <div class="form-group">
+            <label>Email address</label>
+            <%= user.local.email %>
+          </div>
+        </form>
     </div>
 </div>
 
-<script src="app.js" async="true"></script>
-
+<div class="page-header">
+      <h1>Shares<small> My shared projects</small></h1>
 </div>
+
+<div class="row">
+    <% for(var i = 0; i < songs.length; i++) { %>
+          <div class="col-sm-6 col-md-4">
+              <div class="caption">
+                <h3><%= songs[i].title %></h3>
+                <p><strong><%= songs[i].username %></strong> shared with you <strong><%= songs[i].title %></strong> on <strong><%= songs[i].sharedAt %></strong></p>
+                <p>
+                    <a href="/play/<%= songs[i].title %>" class="btn btn-primary" role="button">Goto Song</a>
+                </p>
+              </div>
+          </div>
+    <% } %>
+</div>
+
+
 <%- include footer %>

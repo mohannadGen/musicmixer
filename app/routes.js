@@ -25,7 +25,11 @@ module.exports = function(app, passport){
     app.post('/login', usersController.loginpost(passport));
     app.get('/signup', usersController.signupget);
     app.post('/signup', usersController.signuppost(passport));
-    app.get('/profile', isLoggedIn, usersController.getprofile);
+    app.get('/dashboard', isLoggedIn, usersController.getDashboard);
+    app.get('/profile', usersController.getProfile);
+    app.get('/profile/edit', isLoggedIn, usersController.getProfileSettings);
+    app.post('/profile/edit', urlencodedParser, usersController.saveUserData);
+    app.get('/profile/:username', usersController.getUserProfile);
     app.get('/logout', usersController.logout);
 
     //====================== admin routes ==========================
@@ -37,14 +41,14 @@ module.exports = function(app, passport){
 
     //================= file upload/delete routes =================
     //=============================================================
-    app.post('/uploadFiles', songsController.loadsong);
-    app.get('/:song/delete', isLoggedIn, songsController.deletesong);
+    app.post('/uploadFiles', songsController.loadSong);
+    app.get('/:song/delete', isLoggedIn, songsController.deleteSong);
 
 
     //========================== Shares  ==========================
     //=============================================================
-    app.get('/:song/share',isLoggedIn, songsController.createshare);
-    app.get('/shares',isLoggedIn, songsController.getshare);
+    app.get('/:song/share',isLoggedIn, songsController.createShare);
+    app.get('/explore', isLoggedIn, songsController.getShared);
 
     //==================== player routes ===================
     //======================================================
@@ -69,7 +73,7 @@ function isAllowedAccess(request, response, next){
         if(song.shared) return next();
         if(request.user.idAdmin === true) return next();
         if(String(song.user) == String(request.user._id)) return next();
-        response.redirect('/profile');
+        response.redirect('/dashboard');
     });
 }
 
