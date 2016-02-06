@@ -1,194 +1,254 @@
 <%- include header %>
+
+<div id="playerFrame" class="container-fluid">
+	<link rel="stylesheet" href="/js/libs/jquery-1.9.0/jqueryUI.css">
+    <script src="/js/libs/jquery-1.9.0/jquery.min.js"></script>
+	<script src="/js/libs/jquery-1.9.0/jqueryUI.js"></script>
+	<script src="/js/libs/chroma.js"></script>
+
+    <script type="application/javascript">
+        var str ="<%=stracks%>";
+        console.log("Imp Str: " + str);
+        str = str.replace(new RegExp("&quot;", 'g'),'"');
+        console.log("Imp Str2: " + str);
+        var songtracks = JSON.parse(str);
+		console.log("Parsed: " + songtracks);
+    </script>
+
+    <script src="/js/buffer-loader.js"></script>
+    <script src="/js/sound.js"></script>
+	<script src="/js/soundEffects.js"></script>
+    <script src="/js/waveformDrawer.js"></script>
+
+	<script src="/js/design/designGauche.js"></script>
+
+	<script src="/js/save/save.js"></script>
+
+	<script src="/js/design/slider.js"></script>
+
+    <script>
+        nbInstrumentsMusique = 0;
+    </script>
+
+    <div onload="init();">
+	<div class="row" style="min-height: 15vh;">
+		<div class="col-md-3" style="min-height: inherit;">
+			<div class="row">
+				<button id="bplay" class="col-md-4" onclick="playAllTracks(0);changePlayImg();" style="border: 0; background: transparent;cursor:pointer;">
+					<img id="imgPlay" class="col-md-12" src="/img/play.png" alt="play" onclick="playAllTracks(0);changePlayImg();" />
+				</button>
+				<button id="bpause" class="col-md-4" onclick="pauseAllTracks();changePauseImg();" style="border: 0; background: transparent;cursor:pointer;">
+					<img id="imgPause" class="col-md-12" src="/img/pause.png" alt="pause" onclick="pauseAllTracks();changePauseImg();" />
+				</button>
+				<button id="bstop" class="col-md-4" onclick="stopAllTracks();changeStopImg();" style="border: 0; background: transparent;cursor:pointer;">
+					<img id="imgStop" class="col-md-12" src="/img/stop.png" alt="stop" onclick="stopAllTracks();changeStopImg();" />
+				</button>
+			</div>
+			<div class="row">
+				<img id="imageVolume" class="col-md-6" src="/img/volume/volume10.png" alt="volume" /><br/>
+				<input type="range" id="masterVolume" min="0" max="120" value="50" oninput="changeMasterVolume(this);changeVolumeImg();">
+			</div>
+		</div>
+
+		<div class="col-md-9" style="min-height: inherit;">
+			<canvas id="spectre" width="350" height="100" style="position: absolute; top: 0px; left: 0px;  border: solid 2px;" ></canvas>
+			<canvas id="visualizer" width="350" height="100" style="position: absolute; top: 0px; left: 350px;  border: solid 2px; background-color: black;"></canvas>
+			<canvas id="oscilloscope" width="350" height="100" style="position: absolute;top: 0px; left: 700px;  border: solid 2px; background-color: black;"></canvas>
+		</div>
+	</div>
+	<div class="row" style="min-height: 75vh;">
+		<div class="col-md-2" style="min-height: inherit;">
+			<div id="tracks">
+				<% for(var i=0; i<ttracks.instruments.length; i++) {%>
+					<div class="classMuteTxt col-md-12">
+						<%=ttracks.instruments[i].name%>
+					</div>
+					<div class="volumeTracks col-md-6">
+						<!-- On affiche les images -->
+						<img src="/img/volume2/pistSong1.png" class="imgVolumeClass" alt="img volume2" id="imageVolume2<%=i%>"/>
+						<input type="range" class="rangeVolumeClass" id="volume2RangeTest<%=i%>" min="0" max="120" value="120" oninput="changeVolume2(document.getElementById('volume2RangeTest<%=i%>').value,<%=i%>);" >
+
+					</div>
+					<div class="classMute col-md-6">
+						<button id="mute<%=i%>" onclick="muteUnmuteImg(<%=i%>);muteUnmuteTrack(<%=i%>);" style="border: 0; background: transparent;cursor:pointer;">
+							<img src="/img/unmute.png" width="80px" height="80px" alt="mute" id="imgMute<%=i%>"  onclick="muteUnmuteTrack(<%=i%>);muteUnmuteImg(<%=i%>);" />
+						</button>
+					</div>
+				<%}%>
+			</div>
+		</div>
+		<div class="col-md-4" style="min-height: inherit;">
+			<canvas id="myCanvas" width="450" height="200" ></canvas>
+		</div>
+		<!-- ON LANCE LE SETUP DU SPECTROGRAM APRES QUE LE CANVAS SOIT CREER REELEMENT -->
+		<script>setSpectrogram();</script>
+		<div class="col-md-6" style="min-height: inherit;">
+
+			<div id="divMonoStereo" class="col-md-1">
+				<% for(var i=0; i<ttracks.instruments.length; i++) {%>
+					<button class="bMonoStereo" id="buttonMonoStereo<%=i%>" onclick="changeMonoStereo(<%=i%>);" > S
+					</button>
+				<%}%>
+			</div>
+
+			<div id="divDistortion" class="col-md-2">
+				<% for(var i=0; i<ttracks.instruments.length; i++) {%>
+					<button class="bDistortion" id="buttonDistortion<%=i%>" onclick="makeDistortion(document.getElementById('roundDist<%=i%>').value,<%=i%>);"
+						disabled>Distorsion
+					</button>
+					<div style="position: relative;">
+						<input type="text" id="roundDist<%=i%>" name="round" class="round" data-min="0" data-max="2000" value="0" />
+					</div>
+				<%}%>
+			</div>
+
+			<div id="divEgaliseur" class="col-md-3">
+				<% for(var i=0; i<ttracks.instruments.length; i++) {%>
+				<div>
+					<div class="divLGain col-md-4">
+						<label for="lGain<%=i%>">L:</label>
+						<input type="text" id="lGain<%=i%>" readonly style="border:0; color:#f6931f; font-weight:bold;width: 30px;">
+						<div id="slider-verticalA<%=i%>" class="lGain" style="height:65px;"></div>
+					</div>
+
+					<div class="divMGain col-md-4">
+						<label for="mGain<%=i%>">M:</label>
+						<input type="text" id="mGain<%=i%>" readonly style="border:0; color:#f6931f; font-weight:bold;width: 30px;">
+						<div id="slider-verticalB<%=i%>" class="mGain" style="height:65px;"></div>
+					</div>
+
+					<div class="divHGain col-md-4">
+						<label for="hGain<%=i%>">H:</label>
+						<input type="text" id="hGain<%=i%>" readonly style="border:0; color:#f6931f; font-weight:bold;width: 30px;">
+						<div id="slider-verticalC<%=i%>" class="hGain" style="height:65px;"></div>
+					</div>
+
+					<script>
+						createSlider("slider-verticalA<%=i%>","lGain<%=i%>",<%=i%>);
+						createSlider("slider-verticalB<%=i%>","mGain<%=i%>",<%=i%>);
+						createSlider("slider-verticalC<%=i%>","hGain<%=i%>",<%=i%>);
+					</script>
+				</div>
+				<%}%>
+			</div>
+
+			<div id="divFilter" class="col-md-6">
+				<div class="col-md-12">
+					<span id="txtfilter">Filter :</span>
+					<select id='filterTest' onchange="changeEffect(document.getElementById('filterTest').value);">
+						<option value="lowpass" selected="selected">Low Pass</option>
+						<option value="highpass">High Pass</option>
+						<option value="bandpass">Band Pass</option>
+						<option value="lowshelf">Low Shelf</option>
+						<option value="highshelf">High Shelf</option>
+						<option value="peaking">Peaking</option>
+						<option value="notch">Notch</option>
+						<option value="allpass">All Pass</option>
+					</select>
+
+					<span id="txtFrequency">Frequency :</span>
+					<span id="txtQuality">Quality :</span>
+					<span id="txtGain">Gain :</span>
+				</div>
+
+				<div class="col-md-12">
+					<div class="col-md-12">
+						<input class = "rfilter col-md-4" type="range" id="frequencyRangeTest" min="0" max="3000" value="1000"
+							   oninput="changeFrequency(document.getElementById('frequencyRangeTest').value);"
+							   style=" writing-mode: bt-lr; -webkit-appearance: slider-vertical;">
+
+						<input  class = "rfilter col-md-4" type="range" id="qualityRangeTest" min="0" max="100" value="0"
+								oninput="changeQuality(document.getElementById('qualityRangeTest').value);"
+								style=" writing-mode: bt-lr; -webkit-appearance: slider-vertical;">
+
+						<input  class = "rfilter col-md-4" type="range" id="gainRangeTest" min="0" max="100" value="4"
+								oninput="changeGain1(document.getElementById('gainRangeTest').value);"
+								style=" writing-mode: bt-lr; -webkit-appearance: slider-vertical;">
+					</div>
+					<div class="col-md-12">
+						<span class="col-md-4" id="valFrequency">1000/3000</span>
+						<span class="col-md-4" id="valQuality" >0/100</span>
+						<span class="col-md-4" id="valGain" >4/100</span>
+					</div>
+				</div>
+			</div>
+
+			<div id="divReverb" class="col-md-6">
+				<button id="buttonReverb"
+						onclick="addReverb(0,document.getElementById('selectReverb').value);">
+						Faire une Reverb
+				</button>
+				<select id="selectReverb">
+					<option value="1" selected>Block Inside</option>
+					<option value="2">Bottle Hall</option>
+					<option value="3">Cement Blocks 1</option>
+					<option value="4">Cement Blocks 2</option>
+					<option value="5">Chateau de Logne, Outside</option>
+					<option value="6">Conic Long Echo Hall</option>
+					<option value="7">Deep Space</option>
+					<option value="8">Derlon Sanctuary</option>
+					<option value="9">Direct Cabinet N1</option>
+					<option value="10">Direct Cabinet N2</option>
+					<option value="11">Direct Cabinet N3</option>
+					<option value="12">Direct Cabinet N4</option>
+					<option value="13">Five Columns Long</option>
+					<option value="14">Five Columns</option>
+					<option value="15">French 18th Century Salon</option>
+					<option value="16">Going Home</option>
+					<option value="17">Greek 7 Echo Hall</option>
+					<option value="18">Highly Damped Large Room</option>
+					<option value="19">In The Silo Revised</option>
+					<option value="20">In The Silo</option>
+					<option value="21">Large Bottle Hall</option>
+					<option value="22">Large Long Echo Hall</option>
+					<option value="23">Large Wide Echo Hall</option>
+					<option value="24">Masonic Lodge</option>
+					<option value="25">Musikvereinsaal</option>
+					<option value="26">Narrow Bumpy Space</option>
+					<option value="27">Nice Drum Room</option>
+					<option value="28">On a Star</option>
+					<option value="29">Parking Garage</option>
+					<option value="30">Rays</option>
+					<option value="31">Right Glass Triangle</option>
+					<option value="32">Ruby Room</option>
+					<option value="33">Scala Milan Opera Hall</option>
+					<option value="34">Small Drum Room</option>
+					<option value="35">Small Prehistoric Cave</option>
+					<option value="36">St Nicolaes Church</option>
+					<option value="37">Trig Room</option>
+					<option value="38">Vocal Duo</option>
+				</select>
+			</div>
+
+			<div id="divSave" class="col-md-6">
+				<span>Sauvegarde (statique) :</span>
+				<button id="buttonSave" onclick="saveStatique();" disabled>Sauvegarder</button>
+			</div>
+		</div>
+	</div>
+
+	<script src="/js/design/designDroite.js"></script>
+
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12 page-header">
-      <h1><%= songname %></h1>
+      <h3>
+          Discuss the song
+     </h3>
     </div>
-</div>
-<div class="row" style="overflow: hidden">
-    <!-- ================================= [ START ] ================================= -->
-    <!-- MODIFS DE BENOU -->
-    <div class="col-md-3">
-        <!-- ================================= [  END  ] ================================= -->
-        <button id="bplay" onclick="playAllTracks(0);" disabled>Start</button>
-        <button id="bpause" onclick="pauseAllTracks();" disabled>Pause</button>
-        <button id="bstop" onclick="stopAllTracks();" disabled>Stop</button>
-        <br/>Master Volume :<br/><input type="range" id="masterVolume" min="0" max="100" value="100" oninput="changeMasterVolume(this);">
-        <div id="songs"></div>
-
-
-        <div id="tracks">
-            <% for(var i=0; i<ttracks.instruments.length; i++) {%>
-                <%=ttracks.instruments[i].name%>
-                <button id="mute<%=i%>" onclick="muteUnmuteTrack(<%=i%>);" >mute</button><br/>
-            <%}%>
-        </div>
-    </div>
-
-    <div class="col-md-5">
-        <canvas id="myCanvas" width="500" height="200"></canvas>
-        <canvas class="sample" id="spectre" width="500" height="80"></canvas>
-    </div>
-
-    <div class="col-md-3">
-
-        <spane id="txtfilter">Filter :</spane>
-        <button id="buttonFilter" onclick="disableFilter();" disabled>Désactiver le filtre</button>
-        <select id='filterTest' onchange="changeEffect(document.getElementById('filterTest').value);">
-            <option value="lowpass" selected="selected">Low Pass</option>
-            <option value="highpass">High Pass</option>
-            <option value="bandpass">Band Pass</option>
-            <option value="lowshelf">Low Shelf</option>
-            <option value="highshelf">High Shelf</option>
-            <option value="peaking">Peaking</option>
-            <option value="notch">Notch</option>
-            <option value="allpass">All Pass</option>
-        </select><br/>
-
-        <spane id="txtFrequency">Frequency :</span>  <spane id="txtQuality">Quality :</spane>  <spane id="txtGain">Gain :</spane>
-            <spane>Distortion :</span>
-                <br/>
-                <div class="row">
-                    <div class="col-md-3">
-                        <input class = "rfilter" type="range" id="frequencyRangeTest" min="0" max="3000" value="1000"
-                           oninput="changeFrequency(document.getElementById('frequencyRangeTest').value);" style=" writing-mode: bt-lr;
-                        -webkit-appearance: slider-vertical;">
-                    </div>
-                    <div class="col-md-3">
-                        <input  class = "rfilter" type="range" id="qualityRangeTest" min="0" max="100" value="0"
-                            oninput="changeQuality(document.getElementById('qualityRangeTest').value);" style=" writing-mode: bt-lr;
-                        -webkit-appearance: slider-vertical;">
-                    </div>
-                    <div class="col-md-3">
-                        <input  class = "rfilter" type="range" id="gainRangeTest" min="0" max="100" value="4" oninput="changeGain(document.getElementById('gainRangeTest').value);" style=" writing-mode: bt-lr;
-                -webkit-appearance: slider-vertical;">
-                    </div>
-                    <div class="col-md-3">
-                        <input class = "rfilter" type="range" id="distortionRangeTest" min="0" max="2000" value="0" oninput="changeDistortion(document.getElementById('distortionRangeTest').value);" style=" writing-mode: bt-lr;
-                -webkit-appearance: slider-vertical;">
-                    </div>
-                </div>
-                <br/>
-                <spane id="valFrequency"> 1000/3000 </spane>
-                <spane id="valQuality" > 	&nbsp;	&nbsp;	&nbsp;0/100 </spane>
-                <spane id="valGain" >	&nbsp;	&nbsp;	&nbsp; 4/100 </spane>
-                <spane id="valDistortion"> &nbsp;	&nbsp;	&nbsp;0/2000</spane>
-                <br/>
-
-                <spane id="txtDistortion"> dilay/ms </spane>
-                <input type="text" id="delayDistortion" style="width:50px">
-                <spane id="txtDistortionNum"> no. instruments</spane>
-                <input type="text" id="numInstruDistortion" style="width:50px">
-                <br/><br/>
-                <button id="buttonDistortion" onclick="makeDistortion(document.getElementById('distortionRangeTest').value,document.getElementById('delayDistortion').value,document.getElementById('numInstruDistortion').value);" disabled>Faire une distorsion</button>
-
-    </div>
+    <%- include ratingsSection %>
+    <%- include commentsSection %>
 </div>
 
-<div class="row">
-    <div class="col-md-10 col-md-offset-1">
-        <h2>Discuss the song</h2>
-    </div>
-    <div class="col-md-10 col-md-offset-1">
-        Average rating: <div id="avgRating"></div>
-        Your rating: <div id="userRating"></div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="ratingRadio" value="1">
-                1
-          </label>
-          <label>
-            <input type="radio" name="ratingRadio" value="2">
-                2
-          </label>
-          <label>
-            <input type="radio" name="ratingRadio" value="3">
-                3
-          </label>
-          <label>
-            <input type="radio" name="ratingRadio" value="4">
-                4
-          </label>
-          <label>
-            <input type="radio" name="ratingRadio" value="5">
-                5
-          </label>
-        </div>
-        <button type="submit" class="btn btn-default" onclick="saveRating()">Save Rating</button>
-    </div>
-    <div class="col-md-10 col-md-offset-1">
-          <div class="form-group">
-            <label for="commentArea">Comment</label>
-            <textarea class="form-control" id="commentArea" placeholder="Enter your comment..."></textarea>
-          </div>
-          <button type="submit" class="btn btn-default" onclick="saveComment()">Post Comment!</button>
-    </div>
-</div>
-<div class="row">
-    <div id="commentsList" class="col-md-10 col-md-offset-1">
-    </div>
-</div>
 
 <script>
-
-    var str ="<%= stracks %>" ;
-    str = str.replace(new RegExp("&quot;", 'g'),'"');
-    songtracks = JSON.parse(str);
-
-    nbInstrumentsMusique = 0;
-
-    function loadComments(){
-        $.get("/play/<%= songname %>/comments", function(data){
-            $("#commentsList").empty();
-            for(var i = 0; i < data.length; i++){
-                var comment = data[i];
-                $("#commentsList").append(
-                    "<blockquote><p>"
-                    + comment['body']
-                    + "</p><footer>"
-                    + comment['username']
-                    + " <strong>at</strong> <cite title=\"source title\">"
-                    + comment['createdAt']
-                    + "</cite></footer></blockquote>"
-                );
-            }
-        })
-    }
-
-    function saveComment(){
-        $.post("/play/<%= songname %>/comments",{
-            songname: "<%= songname %>",
-            comment: $("#commentArea").val()
-        }).done(function(data){
-            loadComments();
-            $("#commentArea").val("");
-        })
-    }
-
-    function loadRatings(){
-        $("input:radio[name='ratingRadio']:checked").attr('checked', false);
-        $.get("/play/<%= songname %>/ratings", function(data){
-            $("#avgRating").text(JSON.parse(data[1]));
-            $("#userRating").text(JSON.parse(data[0]));
-        })
-    }
-
-    function saveRating(){
-        $.post("/play/<%= songname %>/rating", {
-            songname: "<%= songname %>",
-            rating: $("input:radio[name='ratingRadio']:checked").val()
-        }).done(function(data){
-            loadRatings();
-        });
-    }
-
     $(document).ready(function(){
         init();
         loadComments();
         loadRatings();
     })
-
 </script>
-<script src="/js/buffer-loader.js"></script>
-<script src="/js/sound.js"></script>
-<script src="/js/waveformDrawer.js"></script>
+
 <%- include footer  %>

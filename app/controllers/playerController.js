@@ -35,10 +35,12 @@ function getTrack(songname, callback) {
         if(err) throw err;
         foundSong = song;
         var pp = __dirname + "/../../users/" + foundSong.user + "/" + songname;
+        console.log("PP dir: " + pp);
         getFiles(pp, function(fileNames) {
             var track = {
                 id: songname,
                 instruments: [],
+                user: foundSong.user,
                 urls : []
             };
             fileNames.sort();
@@ -48,7 +50,8 @@ function getTrack(songname, callback) {
                     name: instrument,
                     sound: instrument + '.mp3'
                 });
-                track.urls.push(songname+'/'+instrument+'.mp3');
+                track.urls.push(songname + '/' + instrument + '.mp3');
+                console.log("Instrument Url: " + pp + '/' + instrument + '.mp3');
             }
             callback(track);
         });

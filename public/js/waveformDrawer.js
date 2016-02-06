@@ -27,12 +27,12 @@ function WaveformDrawer() {
         }
         return max;
     };
-
     // Fist parameter : wjere to start vertically in the canvas (useful when we draw several
     // waveforms in a single canvas)
     // Second parameter = height of the sample
     this.drawWave = function(startY, height) {
-		document.getElementById('myCanvas').style.backgroundColor = 'black';
+
+		document.getElementById('spectre').style.backgroundColor = 'black';
 
         var ctx = this.canvas.getContext('2d');
         ctx.save();
@@ -53,6 +53,7 @@ function WaveformDrawer() {
         ctx.lineTo(width, halfH);
         console.log("drawing from 0, " + halfH + " to " + width + ", " + halfH);
         ctx.stroke();
+
 
         ctx.beginPath();
         ctx.moveTo(0, halfH);

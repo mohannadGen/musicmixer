@@ -4,15 +4,15 @@ function BufferLoader(context, urlList, callback, callbackDraw) {
     this.context = context;
     this.urlList = urlList;
     this.onload = callback;
-    this.bufferList = new Array();
+    this.bufferList = [];
     this.loadCount = 0;
 }
 
 BufferLoader.prototype.loadBuffer = function(url, index) {
-    // Load buffer asynchronously
-    console.log('file : ' + url + "loading and decoding");
+    console.log('file : ' + url + " loading and decoding");
 
     var request = new XMLHttpRequest();
+
     request.open("GET", url, true);
 
     request.responseType = "arraybuffer";
@@ -30,12 +30,8 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
                         alert('error decoding file data: ' + url);
                         return;
                     }
+
                     loader.bufferList[index] = buffer;
-
-					tmpBuffer = buffer;
-
-					//alert(buffer);
-					//alert(loader.bufferList[index]);
 
                     console.log("In bufferLoader.onload bufferList size is " + loader.bufferList.length + " index =" + index);
                     if (++loader.loadCount == loader.urlList.length){
@@ -46,7 +42,14 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
 					*	POUR DESSINER LES COURBES
 					*	@see drawTrack()
 					**/
-					drawTrack(tmpBuffer,nbInstrumentsMusique,index);
+					drawTrack(loader.bufferList[index],nbInstrumentsMusique,index);
+
+					//On fixe le mute a 1
+					mute[index] = 1;
+
+					hGainSave[index]=50;
+					mGainSave[index]=50;
+					lGainSave[index]=50;
                 },
                 function(error) {
                     console.error('decodeAudioData error', error);
@@ -65,30 +68,20 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
     request.send();
 };
 
-
-
-
-
 BufferLoader.prototype.load = function() {
     // M.BUFFA added these two lines.
-    this.bufferList = new Array();
+    this.bufferList = [];
     this.loadCount = 0;
     console.log("BufferLoader.prototype.load urlList size = " + this.urlList.length);
-    for (var i = 0; i < this.urlList.length; ++i){
+	//On compte les instrument (dsl c'est a l'arrache :p)
+
+    nbInstrumentsMusique = this.urlList.length;
+
+    for (var i = 0; i < this.urlList.length; i++){
+        console.log('Curr URL ' + this.urlList[i]);
         this.loadBuffer(this.urlList[i], i);
 	}
-
-}
-
-
-
-
-
-
-
-
-
-
+};
 
 /**
 *	POUR DESSINER LES COURBES

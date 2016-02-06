@@ -11,7 +11,15 @@ var analysers = [];
 // Master volume
 var masterVolumeNode;
 var trackVolumeNodes = [];
+
+//Pour pouvoir sauvegarder le mute
+mute = [];
+
+//Pour sauvegarder la reverb
+reverbe = 0;
+
 var distortionNodes = [];
+var distortionNodesB = [];
 
 var buttonPlay, buttonStop, buttonPause;
 var masterVolumeSlider;
@@ -31,7 +39,48 @@ var delta;
 
 var elapsedTimeSinceStart = 0;
 
-var paused = true;
+var paused = false;
+
+var actualyPlaying = false;
+
+var WIDTH = 500;
+var HEIGHT = 200;
+
+var debugSineWave = 0;
+
+
+// EQ Properties => EGALISEUR
+//
+
+var gainDb = -40.0;
+var bandSplit = [360,3600];
+
+var hGain = [];
+var mGain = [];
+var lGain = [];
+var hBand = [];
+var lBand = [];
+
+hGainSave = [];
+mGainSave = [];
+lGainSave = [];
+
+//tab mono/stereo
+buttonMonoStereo = [];
+
+//Pour la mono / stereo
+splitters = [];
+mergers = [];
+gainMS = [];
+
+//Puis ses couleurs
+
+var	hotChroma = new chroma.ColorScale({
+        colors:['#000000','#ff0000','ffff00','#ffffff'],
+        positions:[0,0.25,0.75,1],
+        mode:'rgb',
+        limits:[0,300]
+});
 
 // requestAnim shim layer by Paul Irish, like that canvas animation works
 // in all browsers
@@ -46,20 +95,18 @@ window.requestAnimFrame = (function() {
             };
 })();
 
-
 function init() {
-
 	// Object that draws a sample waveform in a canvas
 	waveformDrawer = new WaveformDrawer();
-
 
     // Get handles on buttons
     buttonPlay = document.querySelector("#bplay");
     buttonPause = document.querySelector("#bpause");
     buttonStop = document.querySelector("#bstop");
 
-    divTrack = document.getElementById("tracks");
+	buttonSave = document.querySelector("#buttonSave");
 
+    divTrack = document.getElementById("tracks");
 
     // canvas where we draw the samples
     canvas = document.querySelector("#myCanvas");
@@ -76,11 +123,11 @@ function init() {
     frontCtx = frontCanvas.getContext('2d');
 
     frontCanvas.addEventListener("mousedown", function(event) {
-        console.log("mouse click on canvas, let's jump to another position in the song")
+        console.log("mouse click on canvas, let's jump to another position in the song");
         var mousePos = getMousePos(frontCanvas, event);
         // will compute time from mouse pos and start playing from there...
         jumpTo(mousePos);
-    })
+    });
 
     // Master volume slider
     masterVolumeSlider = document.querySelector("#masterVolume");
@@ -95,11 +142,10 @@ function init() {
     // drop down menu
     //loadSongList();
     //var tracks = document.getElementById("hidden").value;
-    loadTrackList(songtracks.id);
+    loadTrackList(songtracks);
 
     animateTime();
 }
-
 
 function initAudioContext() {
     // Initialise the Audio Context
@@ -110,19 +156,13 @@ function initAudioContext() {
 
 	//alert(ctx);
 	analyser = ctx.createAnalyser();
-	javascriptNode = ctx.createScriptProcessor(1024, 1, 1);
+	javascriptNode = ctx.createScriptProcessor(2048, 1, 1);
 	//distortion = ctx.createWaveShaper();
-
-
-
     if(ctx === undefined) {
         throw new Error('AudioContext is not supported. :(');
     }
-
     return ctx;
 }
-// SOUNDS AUDIO ETC.
-
 
 function resetAllBeforeLoadingANewSong() {
     // Marche pas, c'est pour tester...
@@ -142,16 +182,14 @@ function resetAllBeforeLoadingANewSong() {
 }
 
 var bufferLoader;
+
 function loadAllSoundSamples(tracks) {
-
-
     bufferLoader = new BufferLoader(
             context,
             tracks,
             finishedLoading
             );
     bufferLoader.load();
-
 }
 
 function finishedLoading(bufferList) {
@@ -159,60 +197,124 @@ function finishedLoading(bufferList) {
 
     buffers = bufferList;
     buttonPlay.disabled = false;
+
+	buttonSave.disabled = false;
 }
 
 function buildGraph(bufferList) {
-    var sources = [];
+    sources = [];
     // Create a single gain node for master volume
     masterVolumeNode = context.createGain();
     console.log("in build graph, bufferList.size = " + bufferList.length);
 
     bufferList.forEach(function(sample, i) {
 
+		//MONO STEREO
+		splitters[i] = context.createChannelSplitter(2);
+		mergers[i] = context.createChannelMerger(2);
+		gainMS[i] = context.createGain();
+
+		//On cree les boutons mono / stereo pour chaque piste
+		buttonMonoStereo[i] = document.querySelector("#buttonMonoStereo"+i);
+
+		//On ajoute un compresseur
+		// Create a compressor node
+		compressor = context.createDynamicsCompressor();
+		compressor.threshold.value = -24;
+		compressor.knee.value = 30;
+		compressor.ratio.value = 12;
+		compressor.reduction.value = -20;
+		compressor.attack.value = 0.003;
+		compressor.release.value = 0.25;
+
 		//init context pour la distortion
 		distortionNodes[i] = context.createWaveShaper();
-
+		distortionNodesB[i] = false;
 
 		// each sound sample is the  source of a graph
         sources[i] = context.createBufferSource();
         sources[i].buffer = sample;
+
+		/** PARAM EGALISEUR **/
+
+		hBand[i] = context.createBiquadFilter();
+		hBand[i].type = "lowshelf";
+		hBand[i].frequency.value = bandSplit[0];
+		hBand[i].gain.value = gainDb;
+
+		lBand[i] = context.createBiquadFilter();
+		lBand[i].type = "highshelf";
+		lBand[i].frequency.value = bandSplit[1];
+		lBand[i].gain.value = gainDb;
+
+		sources[i].connect(lBand[i]);
+		sources[i].connect(hBand[i]);
+
+		lGain[i] = context.createGain();
+		mGain[i] = context.createGain();
+		hGain[i] = context.createGain();
+
+		lBand[i].connect(lGain[i]);
+		sources[i].connect(mGain[i]);
+		hBand[i].connect(hGain[i]);
+
         // connect each sound sample to a vomume node
         trackVolumeNodes[i] = context.createGain();
-        // Connect the sound sample to its volume node
-        sources[i].connect(trackVolumeNodes[i]);
-        // Connects all track volume nodes a single master volume node
-        //trackVolumeNodes[i].connect(masterVolumeNode);
-		trackVolumeNodes[i].connect(distortionNodes[i]);
 
+		// Connect the sound sample to its volume node
+
+		lGain[i].connect(trackVolumeNodes[i]);
+		mGain[i].connect(trackVolumeNodes[i]);
+		hGain[i].connect(trackVolumeNodes[i]);
+
+		/**
+		lBand[i].connect(trackVolumeNodes[i]);
+		mBand[i].connect(trackVolumeNodes[i]);
+		hBand[i].connect(trackVolumeNodes[i]);
+		**/
+
+
+		//alert(trackVolumeNodes[i].channelCount);
+        // Connects all track volume nodes a single master volume node
+
+		//trackVolumeNodes[i].connect(distortionNodes[i]);
+
+		trackVolumeNodes[i].connect(splitters[i]);
+
+		gainMS[i].value = 0.5;
+		splitters[i].connect(gainMS[i],0);
+
+		gainMS[i].connect(mergers[i], 0, 1);
+		splitters[i].connect(mergers[i], 1, 0);
+
+		mergers[i].connect(distortionNodes[i]);
+
+		//alert(mergers[i].channelCount);
 
 		distortionNodes[i].connect(masterVolumeNode);
 
-        //masterVolumeNode.connect(distortion);
-
-		//distortion.connect(filter);
-
-		masterVolumeNode.connect(filter);
+		masterVolumeNode.connect(compressor);
+		compressor.connect(filter);
 
 		// Note: the Web Audio spec is moving from constants to strings.
-		// filter.type = 'lowpass';
 		filter.type = filter.LOWPASS;
 		filter.frequency.value = 1000;
 
 		// Connect the master volume to the speakers
 		filter.connect(context.destination);
 		filter.connect(analyser);
+
 		analyser.connect(javascriptNode);
 		javascriptNode.connect(context.destination);
 
+		//Parce que c'est mieux ;)
+		analyser.fftSize = 2048;
 
         // On active les boutons start et stop
         samples = sources;
     });
-
-
 	//alert(ctx);
 	//alert(context);
-
 }
 
 // ######### SONGS
@@ -236,7 +338,6 @@ function loadSongList() {
 
             $("<option />", {value: songName, text: songName}).appendTo(s);
 
-
             /*
             var list = document.getElementById("songs");
             var li = document.createElement('li');
@@ -251,7 +352,6 @@ function loadSongList() {
     };
     xhr.send();
 }
-
 
 // ######## TRACKS
 function endsWith(str, suffix) {
@@ -268,6 +368,7 @@ function loadTrackList(songName) {
    // var tracks = session.getAttribrute("tracks");
     //var tracks = document.getElementById("hidden").value;
     //var songtracks = document.cookie("songtracks");
+    console.log("Song Tracks: ");
     console.log(songtracks);
     resetAllBeforeLoadingANewSong();
     resizeSampleCanvas(songtracks.instruments.length);
@@ -300,9 +401,13 @@ function getMousePos(canvas, evt) {
     // width - totalTime
     // x - ?
        stopAllTracks();
-    var totalTime = buffers[0].duration;
+    totalTime = buffers[0].duration;
     var startTime = (mousePos.x * totalTime) / frontCanvas.width;
 	elapsedTimeSinceStart = startTime;
+
+	actualyPlaying = true;
+	changePauseImg();
+
     playAllTracks(startTime);
  }
 
@@ -312,16 +417,20 @@ function animateTime() {
         currentTime = context.currentTime;
         var delta = currentTime - lastTime;
 
+		frontCtx2 = frontCanvas.getContext('2d');
+		frontCtx2.clearRect(0, 0, canvas.width, canvas.height);
+		//frontCtx2.fillStyle = "black";
+
         var totalTime;
 
         frontCtx.clearRect(0, 0, canvas.width, canvas.height);
-        frontCtx.fillStyle = 'white';
+        frontCtx.fillStyle = "rgba(254,105,0,0.6)";
         frontCtx.font = '14pt Arial';
         frontCtx.fillText(elapsedTimeSinceStart.toPrecision(4), 100, 20);
         //console.log("dans animate");
 
         // at least one track has been loaded
-        if (buffers[0] !== undefined) {
+        if (buffers[0] != undefined) {
 
             var totalTime = buffers[0].duration;
             var x = elapsedTimeSinceStart * canvas.width / totalTime;
@@ -333,7 +442,11 @@ function animateTime() {
             frontCtx.lineTo(x, canvas.height);
             frontCtx.stroke();
 
-            elapsedTimeSinceStart += delta;
+			frontCtx2.fillRect(0, 0, x, canvas.height);
+			//frontCtx2.fillStyle = "black";
+			if(elapsedTimeSinceStart <totalTime){
+				elapsedTimeSinceStart += delta;
+			}
             lastTime = currentTime;
         }
     }
@@ -363,6 +476,7 @@ function resizeSampleCanvas(numTracks) {
     canvas.height = SAMPLE_HEIGHT * numTracks;
     frontCanvas.height = canvas.height;
 }
+
 function clearAllSampleDrawings() {
     //ctx.clearRect(0,0, canvas.width, canvas.height);
 }
@@ -373,18 +487,34 @@ function loadSong(song) {
 
 function playAllTracks(startTime) {
 
-    buildGraph(buffers);
+	if(paused){
+		paused = false;
+		actualyPlaying = false;
+		// we were in pause, let's start again from where we paused
+        playAllTracks(elapsedTimeSinceStart);
+        //buttonPause.innerHTML = "Pause";
+		for(var j=0; j<nbInstrumentsMusique;j++){
+			document.getElementById("buttonDistortion"+j).disabled = false;
+		}
+		//buttonFilter.disabled = false;
 
-    playFrom(startTime);
+    }else{
+		//On ne lance play que si il n'est pas déjà lancé
+		if(actualyPlaying == false){
+			actualyPlaying = true;
+			buildGraph(buffers);
+
+			playFrom(startTime);
+		}
+	}
 
 }
 
 // Same as previous one except that we not rebuild the graph. Useful for jumping from one
 // part of the song to another one, i.e. when we click the mouse on the sample graph
 function playFrom(startTime) {
-  // Read current master volume slider position and set the volume
-  setMasterVolume();
-
+	//On precharge les paramètres car le graphe n'était pas construit si pause ou avant start
+	loadParameters();
 	samples.forEach(function(s) {
 		// First parameter is the delay before playing the sample
 		// second one is the offset in the song, in seconds, can be 2.3456
@@ -405,14 +535,18 @@ function playFrom(startTime) {
     buttonPlay.disabled = true;
     buttonStop.disabled = false;
     buttonPause.disabled = false;
-	buttonDistortion.disabled = false;
-	buttonFilter.disabled = false;
+	for(var j=0; j<nbInstrumentsMusique;j++){
+			document.getElementById("buttonDistortion"+j).disabled = false;
+			buttonMonoStereo[j].disabled = false;
+	}
+	//buttonFilter.disabled = false;
 
     // Note : we memorise the current time, context.currentTime always
     // goes forward, it's a high precision timer
     console.log("start all tracks startTime =" + startTime);
     lastTime = context.currentTime;
     paused = false;
+
 }
 
 function stopAllTracks() {
@@ -421,17 +555,21 @@ function stopAllTracks() {
         s.stop(0);
     });
 
+	actualyPlaying = false;
+
 	//masterVolumeNode.disconect(0);
 	//distortion.disconnet(0);
-	filter.disconnect(0);
+	//filter.disconnect(0);
 	//analyser.disconnect(0);
 	//javascriptNode.disconnect(0);
 
     buttonStop.disabled = true;
     buttonPause.disabled = true;
     buttonPlay.disabled = false;
-	buttonDistortion.disabled = true;
-	buttonFilter.disabled = true;
+	for(var j=0; j<nbInstrumentsMusique;j++){
+			document.getElementById("buttonDistortion"+j).disabled = true;
+	}
+	//buttonFilter.disabled = true;
     elapsedTimeSinceStart = 0;
     paused = true;
 }
@@ -444,33 +582,43 @@ function pauseAllTracks() {
             s.stop(0);
         });
 
+		actualyPlaying = false;
+
 		//masterVolumeNode.disconect(0);
 		//distortion.disconnet(0);
-		filter.disconnect(0);
+		//filter.disconnect(0);
 		//analyser.disconnect(0);
 		//javascriptNode.disconnect(0);
 
         paused = true;
-        buttonPause.innerHTML = "Resume";
-		buttonDistortion.disabled = true;
-		buttonFilter.disabled = true;
+        //buttonPause.innerHTML = "Resume";
+		for(var j=0; j<nbInstrumentsMusique;j++){
+			document.getElementById("buttonDistortion"+j).disabled = true;
+		}
+		//buttonFilter.disabled = true;
+		buttonPlay.disabled = false;
     } else {
+		actualyPlaying = false;
         paused = false;
 		// we were in pause, let's start again from where we paused
         playAllTracks(elapsedTimeSinceStart);
-        buttonPause.innerHTML = "Pause";
-		buttonDistortion.disabled = false;
-		buttonFilter.disabled = false;
+        //buttonPause.innerHTML = "Pause";
+		for(var j=0; j<nbInstrumentsMusique;j++){
+			document.getElementById("buttonDistortion"+j).disabled = false;
+		}
+		//buttonFilter.disabled = false;
     }
 }
 
 function setMasterVolume() {
-
-var fraction = parseInt(masterVolumeSlider.value) / parseInt(masterVolumeSlider.max);
+   var fraction = parseInt(masterVolumeSlider.value) / parseInt(masterVolumeSlider.max);
     // Let's use an x*x curve (x-squared) since simple linear (x) does not
     // sound as good.
-if( masterVolumeNode !== undefined)
-    masterVolumeNode.gain.value = fraction * fraction;
+    if( masterVolumeNode != undefined){
+		if(actualyPlaying == true){
+			masterVolumeNode.gain.value = fraction * fraction;
+		}
+	}
 }
 
 function changeMasterVolume() {
@@ -478,160 +626,20 @@ function changeMasterVolume() {
 }
 
 function muteUnmuteTrack(trackNumber) {
-// AThe mute / unmute button
-    var b = document.querySelector("#mute" + trackNumber);
-    if (trackVolumeNodes[trackNumber].gain.value == 1) {
-        trackVolumeNodes[trackNumber].gain.value = 0;
-        b.innerHTML = "Unmute";
-    } else {
-        trackVolumeNodes[trackNumber].gain.value = 1;
-        b.innerHTML = "Mute";
-    }
-}
-
-/* PARTIE FILTER */
-
-function changeFrequency(freq) {
-	//alert(parseInt(freq));
-	filter.frequency.value = parseInt(freq);
-	document.getElementById('valFrequency').innerHTML = freq + " / 3000";
-}
-
-function changeQuality(qual) {
-	//alert(parseInt(qual));
-	filter.Q.value = parseInt(qual);
-	document.getElementById('valQuality').innerHTML = "&nbsp;&nbsp;&nbsp;"+qual + " / 100";
-}
-
-function changeGain(gainVal) {
-	//alert(parseInt(gainVal));
-	filter.gain.value = parseInt(gainVal);
-	document.getElementById('valGain').innerHTML = "&nbsp;&nbsp;&nbsp;"+gainVal + " / 100";
-}
-
-function changeEffect(name) {
-	document.getElementById('gainRangeTest').style.display = 'none';
-	document.getElementById('txtGain').style.display = 'none';
-	document.getElementById('valGain').style.display = 'none';
-	document.getElementById('qualityRangeTest').style.display = 'inherit';
-	document.getElementById('txtQuality').style.display = 'inherit';
-	document.getElementById('valQuality').style.display = 'inherit';
-
-    if (name == "lowpass"){
-		filter.type = name;
-		//PAS DE GAIN
-	}else if (name == "highpass"){
-		filter.type = name;
-		//PAS DE GAIN
-	}else if (name == "bandpass"){
-		filter.type = name;
-		//PAS DE GAIN
-	}else if (name == "lowshelf"){
-		filter.type = name;
-		//PAS DE QUALITE
-		document.getElementById('qualityRangeTest').style.display = 'none';
-		document.getElementById('txtQuality').style.display = 'none';
-		document.getElementById('valQuality').style.display = 'none';
-		document.getElementById('gainRangeTest').style.display = 'inherit';
-		document.getElementById('txtGain').style.display = 'inherit';
-		document.getElementById('valGain').style.display = 'inherit';
-	}else if (name == "highshelf"){
-		filter.type = name;
-		//PAS DE QUALITE
-		document.getElementById('qualityRangeTest').style.display = 'none';
-		document.getElementById('txtQuality').style.display = 'none';
-		document.getElementById('valQuality').style.display = 'none';
-		document.getElementById('gainRangeTest').style.display = 'inherit';
-		document.getElementById('txtGain').style.display = 'inherit';
-		document.getElementById('valGain').style.display = 'inherit';
-	}else if (name == "peaking"){
-		filter.type = name;
-		document.getElementById('gainRangeTest').style.display = 'inherit';
-		document.getElementById('txtGain').style.display = 'inherit';
-		document.getElementById('valGain').style.display = 'inherit';
-	}else if (name == "notch"){
-		filter.type = name;
-		//PAS DE GAIN
-	}else if (name == "allpass"){
-		filter.type = name;
-		//PAS DE GAIN
-	}
-}
-
-function disableFilter(){
-	alert('Non Implémenté!');
-}
-
-/* PARTIE SPECTRUM */
-
-function draw(analyser) {
-    var canvas, context2, width, height, barWidth, barHeight, barSpacing, frequencyData, barCount, loopStep, i, hue;
-
-    canvas = $('canvas')[1];
-	context2 = canvas.getContext('2d');
-
-    width = canvas.width;
-    height = canvas.height;
-    barWidth = 10;
-    barSpacing = 2;
-
-    context2.clearRect(0, 0, width, height);
-    frequencyData = new Uint8Array(analyser.frequencyBinCount);
-    analyser.getByteFrequencyData(frequencyData);
-
-    barCount = Math.round(width / (barWidth + barSpacing));
-    loopStep = Math.floor(frequencyData.length / barCount);
-
-    for (i = 0; i < barCount; i++) {
-
-        barHeight = frequencyData[i * loopStep];
-        hue = parseInt(120 * (1 - (barHeight / 255)), 10);
-        context2.fillStyle = 'hsl(' + hue + ',75%,50%)';
-        context2.fillRect(((barWidth + barSpacing) * i) + (barSpacing / 2), height, barWidth - barSpacing, -barHeight);
-    }
-}
-
-/* PARTIE DISTORTION */
-
-function makeDistortionCurve(amount) {
-
-	//alert(amount);
-
-  var k = typeof amount === 'number' ? amount : 50,
-    n_samples = 44100,
-    curve = new Float32Array(n_samples),
-    deg = Math.PI / 180,
-    i = 0,
-    x;
-  for ( ; i < n_samples; ++i ) {
-    x = i * 2 / n_samples - 1;
-    curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
-  }
-  return curve;
-}
-
-function makeDistortion(amount,delay,numInstru) {
-	//alert(amount+":"+delay+":"+numInstru);
-	//alert(distortion.oversample);
-	if(parseInt(delay) === 0){
-
-		distortionNodes[parseInt(numInstru)].curve = makeDistortionCurve(parseInt(amount));
-		if(amount !== 0){
-			distortionNodes[parseInt(numInstru)].oversample = '4x';
-		}else{
-			distortionNodes[parseInt(numInstru)].oversample = 'none';
+	// AThe mute / unmute button
+	if(trackVolumeNodes[trackNumber]){
+		var b = document.querySelector("#mute" + trackNumber);
+		if (mute[parseInt(trackNumber)] == 0) {
+			if(actualyPlaying == true){
+				trackVolumeNodes[trackNumber].gain.value = 0;
+			}
+			//b.innerHTML = "Unmute";
+		} else {
+			if(actualyPlaying == true){
+				var volumeP = parseFloat(document.getElementById('volume2RangeTest'+trackNumber).value)/120;
+				trackVolumeNodes[trackNumber].gain.value = volumeP;
+			}
+			//b.innerHTML = "Mute";
 		}
-	}else{
-		distortionNodes[parseInt(numInstru)].curve = makeDistortionCurve(parseInt(amount));
-		distortionNodes[parseInt(numInstru)].oversample = '4x';
-
-		setTimeout(function(){
-			makeDistortion(0, 0, parseInt(numInstru));
-		}, parseInt(delay));
 	}
-}
-
-function changeDistortion(gainDistortion) {
-	//alert(gainDistortion);
-	document.getElementById('valDistortion').innerHTML = "&nbsp;&nbsp;&nbsp;"+gainDistortion + " / 2000";
 }

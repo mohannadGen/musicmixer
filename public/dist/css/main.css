@@ -1,28 +1,152 @@
-body {
-    padding-top: 60px;
-}
-
 canvas {
     border: solid 2px black;
 }
-
 #myCanvas {
     background: black;
-    z-index: 1;
     position: absolute;
 }
-
-#canvasFront{
-    z-index: 2;
-    position: absolute;
-}
-
 .sample {
     border: solid white 1px;
     background: black;
+}
+.rfilter::-moz-range-track {
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+.rcompressor::-moz-range-track {
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+}
+.rfilter::-moz-range-thumb, .rcompressor::-moz-range-thumb {
+    border: none;
+    height: 13px;
+    border-radius: 50%;
+    background: #8F00FF;
+}
+.rfilter:-moz-focusring, .rcompressor:-moz-focusring{
+    outline: 1px solid white;
+    outline-offset: -1px;
+}
+.rfilter:focus::-moz-range-track, .rcompressor:focus::-moz-range-track {
+    background: #ccc;
+}
+#masterVolume {
+    cursor:pointer;
+}
+#masterVolume::-moz-range-track {
+    border-radius: 8px;
+    height: 7px;
+    border: 1px solid #bdc3c7;
+    background-color: #fff;
+}
+#masterVolume::-moz-range-thumb {
+    background: #344A9C;
+    border: 1px solid #bdc3c7;
+    height: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.classMuteTxt{
+    font-size: 120%;
+    font-weight: bold;
+}
+#canvasFront{
+    cursor:pointer;
+}
+#filterTest{
+    cursor:pointer;
+}
+#txtfilter{
+    font-weight: bold;
+}
+#frequencyRangeTest{
+    cursor:pointer;
+}
+#qualityRangeTest{
+    cursor:pointer;
+}
+#gainRangeTest{
+    cursor:pointer;
+}
+#labelCompressor{
+    font-weight: bold;
+}
+.rcompressor{
+    cursor: pointer;
+}
+#imgDistortion{
+    cursor:pointer;
+    transform: rotate(-90deg);
+}
+div.round{
+	position:absolute;
+	cursor:pointer;
+}
+div.round input{
     position: absolute;
+	top:25px; left:-10px;
+	font-size: 25px; text-align: center;
+	width: 100px;
+	border:none; background:none;
+	outline:none;
+	cursor: pointer;
+	color: white;
+	z-index:2;
+}
+.ui-slider{
+    cursor: pointer;
+}
+div.round canvas{
+    position: absolute;
+	top:0; left:0; right:0; bottom:0;
+	height: 80px;
+	width: 80px;
+	background-color: black;
+}
+.bMonoStereo{
+    cursor:pointer;
+}
+.bDistortion{
+	position:absolute;
+	cursor:pointer;
+}
+.imgVolumeClass{
+    width: 90px;
+    height: 35px;
+}
+.rangeVolumeClass{
+    width: 90px;
+    height: 35px;
+    cursor:pointer;
+}
+.rangeVolumeClass::-moz-range-thumb {
+    background: #344A9C none repeat scroll 0% 0%;
+    border: 1px solid #BDC3C7;
+    height: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+#selectReverb{
+    cursor:pointer;
+}
+#buttonReverb{
+    width:135px;
+    cursor: pointer;
+}
+#frequencyRangeTest, #qualityRangeTest, #gainRangeTest{
+    width: 33.33%;
 }
 
-.rfilter {
-    width : 60px;
+#playerFrame{
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 70vh;
+}
+
+#masterVolume{
+    width: auto;
 }
