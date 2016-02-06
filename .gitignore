@@ -54,3 +54,4 @@ fabric.properties
 
 
 *.mp3
+/app/log/

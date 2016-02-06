@@ -1,0 +1,16 @@
+<%- include header %>
+Hello Admin! - Posts Data
+
+<% for(var i = 0; i < songs.length; i++) { %>
+    <ul>
+        <% if(songs[i].title !== undefined){ %>
+            <li><a href="/play/<%= songs[i].title %>"><%= songs[i].title %></a></li>
+            <li><%= songs[i].username %></li>
+            <li>Average rating: <%= songs[i].avgRating %></li>
+            <li>Comments: <%= songs[i].comments.length %></li>
+            <li>Is shared: <%= songs[i].shared %></li>
+        <% } %>
+    </ul>
+<% } %>
+
+<%- include footer %>

@@ -121,7 +121,6 @@ exports.loadRatings = function(request, response){
             myRatings.push(song.avgRating);
             if(myRatings[0] === undefined) myRatings[0] = 0;
             if(myRatings[1] === undefined) myRatings[1] = 0;
-            console.log("Ratings" + myRatings);
             response.json(myRatings);
     });
 };

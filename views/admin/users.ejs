@@ -1,0 +1,11 @@
+<%- include header %>
+Hello Admin! - Users Data
+
+<% for(var i = 0; i < users.length; i++) { %>
+    <ul>
+        <li><%= users[i].fullname %></li>
+        <li><a href="#"><%= users[i].local.email %></a></li>
+        <li><%= users[i].local.password %></li>
+    </ul>
+<% } %>
+<%- include footer %>

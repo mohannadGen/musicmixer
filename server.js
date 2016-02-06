@@ -1,4 +1,4 @@
-'use strict'
+/* jshint node: true */
 
 var express      = require('express');
 var app          = express();
@@ -10,16 +10,22 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
-var path         = require('path')
+var path         = require('path');
+var fs           = require('fs');
 
 // database configuration ===========================
 var configDB = require('./config/database.js');
 mongoose.connect(configDB.url);
 require('./config/passport')(passport); // pass passport for configuration
-// ==================================================
 
+// ==================================================
 // setting up express application ===================
-app.use(morgan('dev')); // loging requests to console
+var accessLogStream = fs.createWriteStream(__dirname + '/app/log/access.log', {flags: 'a'});
+console.log("Logging to: " + __dirname + 'app/log/access.log');
+// setup the logger
+app.use(morgan('combined', {stream: accessLogStream}));
+app.use(morgan('dev'));
+
 app.use(cookieParser());
 app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/_tmp' }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -31,7 +37,7 @@ app.use(passport.session());
 app.use(flash());
 
 // setting routes of our app =======================================
-require('./app/routes.js')(app,passport);
+require('./app/routes.js')(app, passport);
 // runnig our app ==================================================
 
 app.listen(port, function(){

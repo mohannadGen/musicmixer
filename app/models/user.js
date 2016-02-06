@@ -10,7 +10,12 @@ var userSchema = mongoose.Schema({
         username     : String,
         email        : String,
         password     : String
-    }
+    },
+    isAdmin: {type: Boolean, default: false}
+});
+
+userSchema.virtual('fullname').get(function(){
+    return this.local.first + " " + this.local.last;
 });
 
 userSchema.methods.generateHash = function(password) {

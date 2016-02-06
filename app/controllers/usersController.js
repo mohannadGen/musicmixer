@@ -33,7 +33,7 @@ exports.signuppost = function(passport){
 
 exports.getprofile = function(req, res){
   songModel.find({user: req.user._id}, function(err, songslist){
-      res.render('profile.ejs',{user: req.user, songs: songslist, message: req.flash('duplicateName')});
+      res.render('profile.ejs', {user: req.user, songs: songslist, message: req.flash('duplicateName')});
   });
 };
 
