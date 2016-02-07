@@ -25,11 +25,13 @@ module.exports = function(app, passport){
     app.post('/login', usersController.loginpost(passport));
     app.get('/signup', usersController.signupget);
     app.post('/signup', usersController.signuppost(passport));
+
     app.get('/dashboard', isLoggedIn, usersController.getDashboard);
     app.get('/profile', usersController.getProfile);
     app.get('/profile/edit', isLoggedIn, usersController.getProfileSettings);
     app.post('/profile/edit', urlencodedParser, usersController.saveUserData);
     app.get('/profile/:username', usersController.getUserProfile);
+    app.get('/:username/delete', isAllowedAdmin, urlencodedParser, usersController.deleteUser);
     app.get('/logout', usersController.logout);
 
     //====================== admin routes ==========================
@@ -38,6 +40,7 @@ module.exports = function(app, passport){
     app.get('/admin/users', isLoggedIn, isAllowedAdmin, adminController.usersData);
     app.get('/admin/posts', isLoggedIn, isAllowedAdmin, adminController.postsData);
     app.get('/admin/stats', isLoggedIn, isAllowedAdmin, adminController.statsData);
+    app.get('/:username/toggleAdmin', isLoggedIn, isAllowedAdmin, urlencodedParser, adminController.toggleAdmin);
 
     //================= file upload/delete routes =================
     //=============================================================
@@ -79,6 +82,5 @@ function isAllowedAccess(request, response, next){
 
 function isAllowedAdmin(request, response, next){
     if(request.user.isAdmin === true) return next();
-    if(request.user.local.email === "admin@gmail.com") return next();
     response.redirect('/');
 }

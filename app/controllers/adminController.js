@@ -23,3 +23,13 @@ exports.postsData = function(request, response){
 exports.statsData = function(request, response){
     response.render('admin/stats.ejs');
 };
+
+exports.toggleAdmin = function(request, response){
+    userModel.findOne({'local.username': request.params.username}, function(err, foundUser){
+        if(err) throw err;
+        foundUser.isAdmin = !foundUser.isAdmin;
+        foundUser.save(function(){
+            response.redirect('/admin/users');
+        });
+    });
+};

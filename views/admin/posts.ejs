@@ -1,16 +1,28 @@
 <%- include header %>
-Hello Admin! - Posts Data
+<table id="mytable" class="table table-bordred table-striped center-block" style="width:50%">
+    <thead>
+    <th>Title</th>
+    <th>Average Rating</th>
+    <th>Comments</th>
+    <th>User</th>
+    <th>Shared</th>
+    <th class ="col-md-1">Delete</th>
+    </thead>
+    <tbody>
 
-<% for(var i = 0; i < songs.length; i++) { %>
-    <ul>
+    <% for(var i=0; i<songs.length; i++) {%>
         <% if(songs[i].title !== undefined){ %>
-            <li><a href="/play/<%= songs[i].title %>"><%= songs[i].title %></a></li>
-            <li><%= songs[i].username %></li>
-            <li>Average rating: <%= songs[i].avgRating %></li>
-            <li>Comments: <%= songs[i].comments.length %></li>
-            <li>Is shared: <%= songs[i].shared %></li>
+            <tr>
+                <td><a href="/play/<%= songs[i].title %>"><%= songs[i].title %></a></td>
+                <td><%= songs[i].avgRating %></td>
+                <td><%= songs[i].comments.length %></td>
+                <td><a href="/profile/<%= songs[i].username %>"><%= songs[i].username %></a></td>
+                <td><%= songs[i].shared %></td>
+                <td><p data-toggle="tooltip" title="Delete"><a href="/<%= songs[i].title %>/delete" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></a></p></td>
+            </tr>
         <% } %>
-    </ul>
-<% } %>
+    <% } %>
 
+    </tbody>
+</table>
 <%- include footer %>

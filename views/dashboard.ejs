@@ -1,8 +1,11 @@
 <%- include header %>
 <div class="container">
+    <% if(user.isAdmin){ %>
+        Go to <a href="/admin">admin area</a>.
+    <% } %>
     <table id="mytable" class="table table-bordred table-striped center-block" style="width:50%">
         <thead>
-        <th >song name</th>
+        <th >Song name</th>
         <th >Rating</th>
         <th class ="col-md-1">Delete</th>
         <th class ="col-md-1">Play</th>

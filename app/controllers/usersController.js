@@ -79,6 +79,13 @@ exports.saveUserData = function(request, response){
     });
 };
 
+exports.deleteUser = function(request, response){
+    userModel.remove({'local.username': request.params.username}, function(err, foundUser){
+        if(err) throw err;
+        response.redirect('/admin/users');
+    });
+};
+
 exports.logout = function(req,res){
   req.logout();
   res.redirect('/');
