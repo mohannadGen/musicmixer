@@ -4,6 +4,8 @@
 var moment = require('moment');
 var fs = require('fs');
 var path = require('path');
+var userModel = require('../models/user');
+var songModel = require('../models/song');
 
 exports.timeConversion = function(unixTimestamp){
     var thisMoment = moment.unix(unixTimestamp);

@@ -1,0 +1,28 @@
+<%- include header %>
+<div class="container">
+    <table id="mytable" class="table table-bordred table-striped center-block" style="width:50%">
+        <thead>
+            <th>Users</th>
+        </thead>
+        <tbody>
+        <% for(var i=0; i<foundUsers.length; i++) {%>
+        <tr>
+            <td><%= foundUsers[i].local.username %></td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
+    <table id="mytable" class="table table-bordred table-striped center-block" style="width:50%">
+        <thead>
+            <th>Songs</th>
+        </thead>
+        <tbody>
+        <% for(var i=0; i<foundSongs.length; i++) {%>
+        <tr>
+            <td><%= foundSongs[i].title %></td>
+        </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+<%- include footer %>

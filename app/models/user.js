@@ -11,6 +11,7 @@ var userSchema = mongoose.Schema({
         email        : String,
         password     : String
     },
+    follows: [{ type : mongoose.Schema.ObjectId, ref : 'User' }],
     isAdmin: {type: Boolean, default: false}
 });
 

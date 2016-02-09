@@ -12,18 +12,15 @@ var session      = require('express-session');
 var path         = require('path');
 var fs           = require('fs');
 
-// database configuration ===========================
-var configDB = require('./config/database.js');
-mongoose.connect(configDB.url);
 require('./config/passport')(passport); // pass passport for configuration
 
 // ==================================================
 // setting up express application ===================
 var accessLogStream = fs.createWriteStream(__dirname + '/app/log/access.log', {flags: 'a'});
-console.log("Logging to: " + __dirname + 'app/log/access.log');
+console.log("Logging to: " + __dirname + '/app/log/access.log');
 // setup the logger
-app.use(morgan('combined', {stream: accessLogStream}));
-app.use(morgan('dev'));
+// app.use(morgan('combined', {stream: accessLogStream}));
+// app.use(morgan('dev'));
 
 app.use(cookieParser());
 app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/_tmp' }));
@@ -42,3 +39,5 @@ require('./app/routes.js')(app, passport);
 app.listen(port, function(){
     console.log('Music mix server is up and running at port:' + port);
 });
+
+module.exports = app;

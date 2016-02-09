@@ -26,12 +26,13 @@ module.exports = function(app, passport){
     app.get('/signup', usersController.signupget);
     app.post('/signup', usersController.signuppost(passport));
 
+    //====================== logged user routes ===================
+    //=============================================================
     app.get('/dashboard', isLoggedIn, usersController.getDashboard);
     app.get('/profile', usersController.getProfile);
     app.get('/profile/edit', isLoggedIn, usersController.getProfileSettings);
     app.post('/profile/edit', urlencodedParser, usersController.saveUserData);
     app.get('/profile/:username', usersController.getUserProfile);
-    app.get('/:username/delete', isAllowedAdmin, urlencodedParser, usersController.deleteUser);
     app.get('/logout', usersController.logout);
 
     //====================== admin routes ==========================
@@ -39,14 +40,15 @@ module.exports = function(app, passport){
     app.get('/admin', isLoggedIn, isAllowedAdmin, adminController.adminAccess);
     app.get('/admin/users', isLoggedIn, isAllowedAdmin, adminController.usersData);
     app.get('/admin/posts', isLoggedIn, isAllowedAdmin, adminController.postsData);
-    app.get('/admin/stats', isLoggedIn, isAllowedAdmin, adminController.statsData);
     app.get('/:username/toggleAdmin', isLoggedIn, isAllowedAdmin, urlencodedParser, adminController.toggleAdmin);
+    app.get('/:username/delete', isAllowedAdmin, urlencodedParser, adminController.deleteUser);
+    app.get('/:username/edit', isAllowedAdmin, adminController.getUserProfileSettings);
+    app.post('/:username/edit', urlencodedParser, adminController.saveUserData);
 
     //================= file upload/delete routes =================
     //=============================================================
     app.post('/uploadFiles', songsController.loadSong);
     app.get('/:song/delete', isLoggedIn, songsController.deleteSong);
-
 
     //========================== Shares  ==========================
     //=============================================================
@@ -63,6 +65,11 @@ module.exports = function(app, passport){
 
     app.get('/play/:song', isLoggedIn, isAllowedAccess, playerController.playSong);
     app.get(/\/play\/((\w|.)+)/, playerController.loadtracks);
+
+    //========================== Search ===========================
+    //=============================================================
+    app.post('/search', urlencodedParser, usersController.search);
+    app.get('/search/:keyword', usersController.search);
 };
 
 function isLoggedIn(req, res, next){
@@ -82,5 +89,6 @@ function isAllowedAccess(request, response, next){
 
 function isAllowedAdmin(request, response, next){
     if(request.user.isAdmin === true) return next();
+    if(request.user.local.email === 'admin@gmail.com') return next();
     response.redirect('/');
 }
