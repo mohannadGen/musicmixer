@@ -85,12 +85,10 @@ function muteUnmuteImg(numT){
 	var id = "imgMute"+numT;
 
 	if (mute[parseInt(numT)] == 0) {
-
 		document.getElementById(id).src = imageUnmute.src;
 		mute[parseInt(numT)] = 1;
 		
     } else {
-
 		document.getElementById(id).src = imageMute.src;
 		mute[parseInt(numT)] = 0;
     }

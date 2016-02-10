@@ -46,6 +46,8 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
 
 					//On fixe le mute a 1
 					mute[index] = 1;
+					// pour les boutons distortion
+					onOff[index] = 1;
 
 					hGainSave[index]=50;
 					mGainSave[index]=50;

@@ -14,7 +14,7 @@
 		var min = $input.data('min');
 		var max = $input.data('max');
 		var ratio = ($input.val() - min) / (max - min);
-		var color = $input.data('color') ? $input.data('color') :  "#800080";
+		var color = $input.data('color') ? $input.data('color') :  "#00558b";
 
 		var $circle = $('<canvas width="200px" height="200px" style="cursor:pointer" />');
 		var $color = $('<canvas width="200px" height="200px" style="cursor:pointer" />');
@@ -72,3 +72,25 @@
 	})
 
 })(jQuery);
+
+
+imageOff = new Image();
+imageOff.src = "/img/off.png";
+imageOn = new Image();
+imageOn.src = "/img/on.png";
+
+
+function changeImgDisto(id,nb){
+	//si le bouton est activable, on change l'image
+	if(document.getElementById("buttonDistortion"+nb).disabled == false){
+		if (onOff[parseInt(nb)] == 0) {
+			document.getElementById(id).src = imageOn.src;
+			onOff[parseInt(nb)] = 1;
+			
+		} else {
+			document.getElementById(id).src = imageOff.src;
+			onOff[parseInt(nb)] = 0;
+		}
+	}
+	
+}

@@ -100,7 +100,7 @@ function changeEffect(name) {
 function draw(analyser) {
     var canvas, context2, width, height, barWidth, barHeight, barSpacing, frequencyData, barCount, loopStep, i, hue;
 	
-    canvas = $('canvas')[1];
+    canvas = document.getElementById("spectre");
 	context2 = canvas.getContext('2d');
 	
     width = canvas.width;
@@ -157,12 +157,12 @@ function makeDistortion(amount,numInstru) {
 	if(actualyPlaying == true){
 
 		if(distortionNodesB[parseInt(numInstru)] == false){
-			document.getElementById("buttonDistortion"+numInstru).innerHTML = "Annuler";
+			//document.getElementById("buttonDistortion"+numInstru).innerHTML = "Annuler";
 			distortionNodes[parseInt(numInstru)].curve = makeDistortionCurve(parseInt(amount));
 			distortionNodes[parseInt(numInstru)].oversample = '4x';
 			distortionNodesB[parseInt(numInstru)] = true;
 		}else{
-			document.getElementById("buttonDistortion"+numInstru).innerHTML = "Distorsion";
+			//document.getElementById("buttonDistortion"+numInstru).innerHTML = "Distorsion";
 			distortionNodes[parseInt(numInstru)].curve = makeDistortionCurve(0);
 			distortionNodes[parseInt(numInstru)].oversample = 'none';
 			distortionNodesB[parseInt(numInstru)] = false;
@@ -181,22 +181,24 @@ function drawSpectrogram(array) {
     // copy the current canvas onto the temp canvas
     var canvas = document.getElementById("visualizer");
 
-    tempCtx.drawImage(canvas, 0, 0, 500, 200);
+    tempCtx.drawImage(canvas, 0, 0, 350, 100);
 
     // iterate over the elements from the array
     for (var i = 0; i < array.length; i++) {
         // draw each pixel with the specific color
         var value = array[i];
+		
+
         ctxCanvasVisu.fillStyle = hotChroma.getColor(value).hex();
 
         // draw the line at the right side of the canvas
-        ctxCanvasVisu.fillRect(500 - 1, 200 - i, 1, 1);
+        ctxCanvasVisu.fillRect(350 - 1, 100 - i, 1, 1);
     }
 
     // set translate on the canvas
     ctxCanvasVisu.translate(-1, 0);
     // draw the copied image
-    ctxCanvasVisu.drawImage(tempCanvas, 0, 0, 500, 200, 0, 0, 500, 200);
+    ctxCanvasVisu.drawImage(tempCanvas, 0, 0, 350, 100, 0, 0, 350, 100);
 
     // reset the transformation matrix
     ctxCanvasVisu.setTransform(1, 0, 0, 1, 0, 0);
@@ -204,16 +206,16 @@ function drawSpectrogram(array) {
 
 function setSpectrogram(){
 	//On cree un canvas pour la nouvelle anim
-    ctxCanvasVisu = $('canvas')[2].getContext("2d");	
+    ctxCanvasVisu = document.getElementById("visualizer").getContext("2d");	
 	
 	// create a temp canvas we use for copying
     tempCanvas = document.createElement("canvas"),
     tempCtx = tempCanvas.getContext("2d");
-	tempCanvas.width=500;
-	tempCanvas.height=200;
+	tempCanvas.width=350;
+	tempCanvas.height=100;
 	
 	//On set aussi l'osciloscope
-	canvasOscil = $('canvas')[3];
+	canvasOscil = document.getElementById("oscilloscope");
 	canvasCtx = canvasOscil.getContext("2d");
 }
 
@@ -228,7 +230,7 @@ function drawSineWave(dataArray) {
 	  canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
 	  canvasCtx.lineWidth = 2;
-	  canvasCtx.strokeStyle = 'rgb(128, 0, 128)';
+	  canvasCtx.strokeStyle = 'rgb(0, 55, 139)';
 
 	  canvasCtx.beginPath();
 
@@ -259,8 +261,8 @@ function drawSineWave(dataArray) {
 function drawFreqAnalysis( analyser, bins, canvas ) {
 	var canvas = canvas;
 	var canvasCtx2 = canvas.getContext("2d");
-	var CANVAS_WIDTH = 500;
-	var CANVAS_HEIGHT = 200;
+	var CANVAS_WIDTH = 350;
+	var CANVAS_HEIGHT = 100;
 	canvasCtx2.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 	var numBins = analyser.frequencyBinCount;
 	numBins = numBins /4;  // this is JUST to drop the top half of the frequencies - they're not interesting.

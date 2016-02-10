@@ -43,8 +43,8 @@ var paused = false;
 
 var actualyPlaying = false;
 
-var WIDTH = 500;
-var HEIGHT = 200;
+var WIDTH = 350;
+var HEIGHT = 100;
 
 var debugSineWave = 0;
 
@@ -76,11 +76,14 @@ gainMS = [];
 //Puis ses couleurs
 
 var	hotChroma = new chroma.ColorScale({
-        colors:['#000000','#ff0000','ffff00','#ffffff'],
+        colors:['#000000','#0000ff','00ffff','#ffffff'],
         positions:[0,0.25,0.75,1],
         mode:'rgb',
         limits:[0,300]
 });
+
+//pour les distortion (bouton)
+onOff = [];
 
 // requestAnim shim layer by Paul Irish, like that canvas animation works
 // in all browsers
@@ -208,6 +211,9 @@ function buildGraph(bufferList) {
     console.log("in build graph, bufferList.size = " + bufferList.length);
 
     bufferList.forEach(function(sample, i) {
+		
+		//On fixe les boutons à 0 pour pouvoir activer la distortion
+		onOff[i] = 0;
 
 		//MONO STEREO
 		splitters[i] = context.createChannelSplitter(2);
@@ -215,7 +221,7 @@ function buildGraph(bufferList) {
 		gainMS[i] = context.createGain();
 
 		//On cree les boutons mono / stereo pour chaque piste
-		buttonMonoStereo[i] = document.querySelector("#buttonMonoStereo"+i);
+		//buttonMonoStereo[i] = document.querySelector("#buttonMonoStereo"+i);
 
 		//On ajoute un compresseur
 		// Create a compressor node
@@ -537,7 +543,7 @@ function playFrom(startTime) {
     buttonPause.disabled = false;
 	for(var j=0; j<nbInstrumentsMusique;j++){
 			document.getElementById("buttonDistortion"+j).disabled = false;
-			buttonMonoStereo[j].disabled = false;
+			//buttonMonoStereo[j].disabled = false;
 	}
 	//buttonFilter.disabled = false;
 
@@ -568,6 +574,8 @@ function stopAllTracks() {
     buttonPlay.disabled = false;
 	for(var j=0; j<nbInstrumentsMusique;j++){
 			document.getElementById("buttonDistortion"+j).disabled = true;
+			//On fixe les boutons à 1 pour pouvoir desactiver la distortion
+			onOff[j] = 1;
 	}
 	//buttonFilter.disabled = true;
     elapsedTimeSinceStart = 0;
@@ -605,6 +613,8 @@ function pauseAllTracks() {
         //buttonPause.innerHTML = "Pause";
 		for(var j=0; j<nbInstrumentsMusique;j++){
 			document.getElementById("buttonDistortion"+j).disabled = false;
+			//On fixe les boutons à 1 pour pouvoir desactiver la distortion
+			onOff[j] = 1;
 		}
 		//buttonFilter.disabled = false;
     }

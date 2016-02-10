@@ -41,8 +41,8 @@ function WaveformDrawer() {
         //ctx.fillStyle = this.color;
         //ctx.strokeStyle = this.color;
 
-		ctx.fillStyle = 'purple';
-        ctx.strokeStyle = 'purple';
+		ctx.fillStyle = '#00558b';
+        ctx.strokeStyle = '#00558b';
 
         var width = this.displayWidth;
         var coef = height / (2 * this.max(this.peaks));

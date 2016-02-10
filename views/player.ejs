@@ -31,17 +31,17 @@
     </script>
 
     <div onload="init();">
-	<div class="row" style="min-height: 15vh;">
+	<div class="row" id="topPlayer" style="min-height: 15vh;">
 		<div class="col-md-3" style="min-height: inherit;">
 			<div class="row">
 				<button id="bplay" class="col-md-4" onclick="playAllTracks(0);changePlayImg();" style="border: 0; background: transparent;cursor:pointer;">
-					<img id="imgPlay" class="col-md-12" src="/img/play.png" alt="play" onclick="playAllTracks(0);changePlayImg();" />
+					<img id="imgPlay" class="col-md-12" src="/img/play.png" alt="play" />
 				</button>
 				<button id="bpause" class="col-md-4" onclick="pauseAllTracks();changePauseImg();" style="border: 0; background: transparent;cursor:pointer;">
-					<img id="imgPause" class="col-md-12" src="/img/pause.png" alt="pause" onclick="pauseAllTracks();changePauseImg();" />
+					<img id="imgPause" class="col-md-12" src="/img/pause.png" alt="pause" />
 				</button>
 				<button id="bstop" class="col-md-4" onclick="stopAllTracks();changeStopImg();" style="border: 0; background: transparent;cursor:pointer;">
-					<img id="imgStop" class="col-md-12" src="/img/stop.png" alt="stop" onclick="stopAllTracks();changeStopImg();" />
+					<img id="imgStop" class="col-md-12" src="/img/stop.png" alt="stop" />
 				</button>
 			</div>
 			<div class="row">
@@ -63,15 +63,15 @@
 					<div class="classMuteTxt col-md-12">
 						<%=ttracks.instruments[i].name%>
 					</div>
-					<div class="volumeTracks col-md-6">
+					<div class="volumeTracks col-md-6 testNiqueBootstrap">
 						<!-- On affiche les images -->
 						<img src="/img/volume2/pistSong1.png" class="imgVolumeClass" alt="img volume2" id="imageVolume2<%=i%>"/>
-						<input type="range" class="rangeVolumeClass" id="volume2RangeTest<%=i%>" min="0" max="120" value="120" oninput="changeVolume2(document.getElementById('volume2RangeTest<%=i%>').value,<%=i%>);" >
+						<input type="range" class="rangeVolumeClass" id="volume2RangeTest<%=i%>" width="80px" min="0" max="120" value="120" oninput="changeVolume2(document.getElementById('volume2RangeTest<%=i%>').value,<%=i%>);" >
 
 					</div>
-					<div class="classMute col-md-6">
+					<div class="classMute col-md-6 testNiqueBootstrap2">
 						<button id="mute<%=i%>" onclick="muteUnmuteImg(<%=i%>);muteUnmuteTrack(<%=i%>);" style="border: 0; background: transparent;cursor:pointer;">
-							<img src="/img/unmute.png" width="80px" height="80px" alt="mute" id="imgMute<%=i%>"  onclick="muteUnmuteTrack(<%=i%>);muteUnmuteImg(<%=i%>);" />
+							<img src="/img/unmute.png" class="imgMuteClass" width="80px" height="80px" alt="mute" id="imgMute<%=i%>"/>
 						</button>
 					</div>
 				<%}%>
@@ -84,19 +84,22 @@
 		<script>setSpectrogram();</script>
 		<div class="col-md-6" style="min-height: inherit;">
 
+			<!--
 			<div id="divMonoStereo" class="col-md-1">
 				<% for(var i=0; i<ttracks.instruments.length; i++) {%>
 					<button class="bMonoStereo" id="buttonMonoStereo<%=i%>" onclick="changeMonoStereo(<%=i%>);" > S
 					</button>
 				<%}%>
 			</div>
+			-->
+		
 
 			<div id="divDistortion" class="col-md-2">
 				<% for(var i=0; i<ttracks.instruments.length; i++) {%>
-					<button class="bDistortion" id="buttonDistortion<%=i%>" onclick="makeDistortion(document.getElementById('roundDist<%=i%>').value,<%=i%>);"
-						disabled>Distorsion
+					<button class="bDistortion" id="buttonDistortion<%=i%>" disabled>
 					</button>
-					<div style="position: relative;">
+					<img src="/img/off.png" class="imgDistortion" width="20px" height="20px" alt="disto" id="imgDistortion<%=i%>" style="position:absolute;top:<%=i*100 +40%>px;" onclick="makeDistortion(document.getElementById('roundDist<%=i%>').value,<%=i%>);changeImgDisto('imgDistortion<%=i%>',<%=i%>);"/>
+					<div style="position: relative;top: 10px;">
 						<input type="text" id="roundDist<%=i%>" name="round" class="round" data-min="0" data-max="2000" value="0" />
 					</div>
 				<%}%>
@@ -104,22 +107,19 @@
 
 			<div id="divEgaliseur" class="col-md-3">
 				<% for(var i=0; i<ttracks.instruments.length; i++) {%>
-				<div>
+				<div width="100%">
 					<div class="divLGain col-md-4">
-						<label for="lGain<%=i%>">L:</label>
-						<input type="text" id="lGain<%=i%>" readonly style="border:0; color:#f6931f; font-weight:bold;width: 30px;">
+						<input type="text" class="inputEgal" id="lGain<%=i%>" readonly style="border:0; color:#00558b; font-weight:bold;height:30px;">
 						<div id="slider-verticalA<%=i%>" class="lGain" style="height:65px;"></div>
 					</div>
 
 					<div class="divMGain col-md-4">
-						<label for="mGain<%=i%>">M:</label>
-						<input type="text" id="mGain<%=i%>" readonly style="border:0; color:#f6931f; font-weight:bold;width: 30px;">
+						<input type="text" class="inputEgal" id="mGain<%=i%>" readonly style="border:0; color:#00558b; font-weight:bold;height:30px;">
 						<div id="slider-verticalB<%=i%>" class="mGain" style="height:65px;"></div>
 					</div>
 
 					<div class="divHGain col-md-4">
-						<label for="hGain<%=i%>">H:</label>
-						<input type="text" id="hGain<%=i%>" readonly style="border:0; color:#f6931f; font-weight:bold;width: 30px;">
+						<input type="text" class="inputEgal" id="hGain<%=i%>" readonly style="border:0; color:#00558b; font-weight:bold;height:30px;">
 						<div id="slider-verticalC<%=i%>" class="hGain" style="height:65px;"></div>
 					</div>
 
@@ -128,6 +128,7 @@
 						createSlider("slider-verticalB<%=i%>","mGain<%=i%>",<%=i%>);
 						createSlider("slider-verticalC<%=i%>","hGain<%=i%>",<%=i%>);
 					</script>
+					
 				</div>
 				<%}%>
 			</div>
@@ -154,16 +155,13 @@
 				<div class="col-md-12">
 					<div class="col-md-12">
 						<input class = "rfilter col-md-4" type="range" id="frequencyRangeTest" min="0" max="3000" value="1000"
-							   oninput="changeFrequency(document.getElementById('frequencyRangeTest').value);"
-							   style=" writing-mode: bt-lr; -webkit-appearance: slider-vertical;">
+							   oninput="changeFrequency(document.getElementById('frequencyRangeTest').value);">
 
 						<input  class = "rfilter col-md-4" type="range" id="qualityRangeTest" min="0" max="100" value="0"
-								oninput="changeQuality(document.getElementById('qualityRangeTest').value);"
-								style=" writing-mode: bt-lr; -webkit-appearance: slider-vertical;">
+								oninput="changeQuality(document.getElementById('qualityRangeTest').value);">
 
 						<input  class = "rfilter col-md-4" type="range" id="gainRangeTest" min="0" max="100" value="4"
-								oninput="changeGain1(document.getElementById('gainRangeTest').value);"
-								style=" writing-mode: bt-lr; -webkit-appearance: slider-vertical;">
+								oninput="changeGain1(document.getElementById('gainRangeTest').value);">
 					</div>
 					<div class="col-md-12">
 						<span class="col-md-4" id="valFrequency">1000/3000</span>
@@ -219,6 +217,56 @@
 					<option value="38">Vocal Duo</option>
 				</select>
 			</div>
+			
+			<div id="divCompressor" class="col-md-6">
+		
+				<span id="labelCompressor">Compression :</span>
+				
+				<br/>
+				
+				<span id="txtThreshold">Threshold :</span>  
+				<input class = "rcompressor" type="range" id="thresholdRangeTest" min="0" max="100" value="24" 
+							oninput="changeCompressorThreshold(document.getElementById('thresholdRangeTest').value);">
+				<span id="valThreshold"> 	&nbsp;&nbsp;&nbsp; -24/-100</span>
+				
+				<br/>
+				
+				<span id="txtKnee">Knee :</span>  
+				<input class = "rcompressor" type="range" id="kneeRangeTest" min="0" max="40" value="30" 
+							oninput="changeCompressorKnee(document.getElementById('kneeRangeTest').value);">
+				<span id="valKnee"> 	&nbsp;&nbsp;&nbsp; 30/40</span>
+				
+				<br/>
+				
+				<span id="txtRatio">Ratio :</span> 
+				<input class = "rcompressor" type="range" id="ratioRangeTest" min="1" max="20" value="12" 
+							oninput="changeCompressorRatio(document.getElementById('ratioRangeTest').value);">
+				<span id="valRatio"> 	&nbsp;&nbsp;&nbsp; 12/20</span>
+				
+				<br/>
+				
+				<span id="txtReduction">Reduction :</span>  
+				<input class = "rcompressor" type="range" id="reductionRangeTest" min="0" max="20" value="20" 
+							oninput="changeCompressorReduction(document.getElementById('reductionRangeTest').value);">
+				<span id="valReduction"> 	&nbsp;&nbsp;&nbsp; -20/-20</span>
+				
+				<br/>
+				
+				<span id="txtAttack">Attack :</span>  
+				<input class = "rcompressor" type="range" id="attackRangeTest" min="0" max="1000" value="3" 
+							oninput="changeCompressorAttack(document.getElementById('attackRangeTest').value);">
+				<span id="valAttack"> 	&nbsp;&nbsp;&nbsp; 0.003/1.000</span>
+				
+				<br/>
+				
+				<span id="txtRelease">Release :</span>  
+				<input class = "rcompressor" type="range" id="releaseRangeTest" min="0" max="100" value="25" 
+							oninput="changeCompressorRelease(document.getElementById('releaseRangeTest').value);">
+				<span id="valRelease"> 	&nbsp;&nbsp;&nbsp; 0.25/1.00</span>
+				
+				<br/>
+				
+			</div>
 
 			<div id="divSave" class="col-md-6">
 				<span>Sauvegarde (statique) :</span>
@@ -250,5 +298,169 @@
         loadRatings();
     })
 </script>
+
+<style>
+
+	
+	/** debug css chrome **/
+	input[type=range]{
+		-webkit-appearance: none;
+	}
+
+	.rfilter::-webkit-slider-runnable-track {
+		width: 100px;
+		height: 5px;
+		background: #ddd;
+		border: none;
+		border-radius: 3px;
+	}
+	.rcompressor::-webkit-slider-runnable-track {
+		height: 5px;
+		width: 5px;
+		background: #ddd;
+		border: none;
+		border-radius: 3px;
+	}
+	.rfilter::-webkit-slider-thumb, .rcompressor::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		border: none;
+		height: 13px;
+		width: 13px;
+		border-radius: 50%;
+		background: #00558b;
+		
+		position:relative;
+		top: -5px;
+	}
+	.rfilter:focus::-webkit-slider-runnable-track, .rcompressor:focus::-webkit-slider-runnable-track {
+		background: #ccc;
+	}
+	#masterVolume::-webkit-slider-runnable-track{
+		border-radius: 8px;
+		height: 7px;
+		width: 7px;
+		border: 1px solid #bdc3c7;
+		background-color: #fff;
+	}
+	#masterVolume::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		background: #00558b;
+		border: 1px solid #bdc3c7;
+		height: 20px;
+		width: 20px;
+		border-radius: 10px;
+		cursor: pointer;
+		
+		position:relative;
+		top: -5px;
+	}
+	.rangeVolumeClass::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		background: #00558b;
+		border: 1px solid #bdc3c7;
+		height: 20px;
+		width: 20px;
+		border-radius: 10px;
+		cursor: pointer;
+		
+		position:relative;
+		top: -5px;
+	}
+	.rangeVolumeClass::-webkit-slider-runnable-track {
+		border-radius: 8px;
+		height: 7px;
+		width: 7px;
+		border: 1px solid #bdc3c7;
+		background-color: #fff;
+	}
+	
+	#divDistortion {
+		background-color: silver;
+		height: <%=ttracks.instruments.length*100 + 2%>px;
+	}
+	
+	#divEgaliseur{
+		background-color: silver;
+		height: <%=ttracks.instruments.length*100 + 2%>px;
+	}
+	
+	#tracks{
+		background-color: silver;
+		height: <%=ttracks.instruments.length*100 + 2%>px;
+	}
+	
+	.rangeVolumeClass{
+		width:80px;
+	}
+	
+	.imgMuteClass{
+		position:relative;
+		top:-10px;
+	}
+	
+	
+	.bDistortion{
+		display:none;
+	}
+	
+	.imgDistortion{
+		cursor:pointer;
+		z-index= 2;
+		left: 0px;
+	}
+	
+	#topPlayer{
+		background-color: silver;
+	}
+	
+	#playerFrame{
+		background-color: silver;
+	}
+	
+	.inputEgal{
+		background-color: silver;
+		width:30px;
+	}
+	
+	.rangeVolumeClass{
+
+		background-color: silver;
+	}
+	
+	.rfilter{
+		background-color: silver;
+	}
+	
+	#divFilter{
+		border: 1px solid black;
+		padding: 10px;
+	}
+	
+	#divReverb{
+		border: 1px solid black;
+		padding: 10px;
+	}
+	
+	#divCompressor{
+		border: 1px solid black;
+		padding: 10px;
+	}
+	
+	#divEgaliseur{
+		border: 1px solid black;
+		padding: 10px;
+		padding-right:30px;
+		padding-bottom: 30px;
+	}
+	
+	#divDistortion{
+		border-bottom: 1px solid black;
+		border-top: 1px solid black;
+		border-left: 1px solid black;
+		padding-left:20px;
+		padding-bottom:10px;
+	}
+	
+</style>
 
 <%- include footer  %>
