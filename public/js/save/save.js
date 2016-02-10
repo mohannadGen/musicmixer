@@ -116,32 +116,21 @@ function saveStatique(){
 		//On ferme le json
 		stringJSON = stringJSON + " } ";
 
-		alert(stringJSON);
-
-	//STEP 2 On envoie la String JSON au serveur
-	$.ajax({
-
-		type: "POST",
-		url: "LA OU TU VEUX RECEVOIR LA STRING exemple: /user/song/paramSong.do",
-		data: "stringJSON=" + stringJSON,
-		success: function(response, state){
-		  // we have the response
-		  alert("response: stringJSON = "+stringJSON);
-		},
-		error: function(resultat, statut, erreur){
-		  // we have an error
-		  alert('Error: ' + erreur);
-
-		}
-
-	});
+		$.post("/play/<%= songname %>/saveSettings",{
+	        settings: stringJSON
+	    }).done(function(data){
+	    });
 
 }
 
 
 var utilisateur = "owner";
 function loadParameters(){
-
+	var stringJSON;
+	$.get("/play/<%= songname %>/loadSettings", function(data){
+		stringJSON = data;
+    });
+	
 	if(utilisateur == "owner"){
 
 		//On pr�charge tous les param�tres
