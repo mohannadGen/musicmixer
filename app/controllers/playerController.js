@@ -23,10 +23,13 @@ exports.playSong = function(req,res){
 
 exports.loadtracks = function (req, res) {
     var songname = req.params[0];
-    var p = __dirname + "/../../users/" + req.user._id + "/" + songname;
-    var pp = path.resolve(p);
+    var mainSongName = songname.split('/')[0];
+    songModel.findOne({title: mainSongName}, function(err, song){
+        var p = __dirname + "/../../users/" + song.user + "/" + songname;
+        var pp = path.resolve(p);
 
-    res.sendfile(pp);
+        res.sendfile(pp);
+    });
 };
 
 function getTrack(songname, callback) {

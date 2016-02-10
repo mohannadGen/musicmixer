@@ -159,9 +159,6 @@ div.round canvas{
 }
 
 #playerFrame{
-    overflow-x: hidden;
-    overflow-y: auto;
-    max-height: 70vh;
 }
 
 #masterVolume{
@@ -213,11 +210,11 @@ div.round canvas{
 }
 
 #txtQuality{
-	
+
 	position:absolute;
 	top: 150px;
 	left:0px;
-	
+
 }
 
 #qualityRangeTest{
@@ -255,7 +252,7 @@ div.round canvas{
 
 
 #divEgaliseur{
-	
+
 	position:relative;
 	top: 0px;
 	left: 0px;
@@ -282,7 +279,7 @@ div.round canvas{
 #divCompressor{
 	top: 80px;
 	left: 50px;
-	
+
 	background-color: silver;
 }
 
@@ -388,6 +385,3 @@ div.round canvas{
 	left: 250px;
 	width:150px;
 }
-
-
-

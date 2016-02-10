@@ -63,8 +63,7 @@ BufferLoader.prototype.loadBuffer = function(url, index) {
         //console.log("loaded : " + e.loaded + " total : " + e.total);
     };
 
-    request.onerror = function() {
-        alert('BufferLoader: XHR error');
+    request.onerror = function(err) {
     };
 
     request.send();
