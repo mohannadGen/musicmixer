@@ -12,13 +12,20 @@ var _ = require('lodash');
 
 exports.playSong = function(req,res){
     var songname = req.params.song;
-    function sendTrack(track) {
-        if (!track)
-            return res.send(404, 'Track not found with id "' + songname + '"');
-        var d = JSON.stringify(track).replace(/ /g, '');
-        res.render('player.ejs', {songname: songname, ttracks :track , stracks : d});
-    }
-    getTrack(songname, sendTrack);
+    songModel.findOne({title: songname}, function(err, song){
+        var isSubmitter = false;
+        if(String(song.user) == String(req.user._id)) {
+            isSubmitter = true;
+            console.log("Owner checked");
+        }
+        function sendTrack(track) {
+            if (!track)
+                return res.send(404, 'Track not found with id "' + songname + '"');
+            var d = JSON.stringify(track).replace(/ /g, '');
+            res.render('player.ejs', {songname: songname, ttracks :track , stracks : d, isOwner: isSubmitter});
+        }
+        getTrack(songname, sendTrack);
+    });
 };
 
 exports.loadtracks = function (req, res) {

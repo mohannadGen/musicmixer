@@ -1,5 +1,8 @@
 <%- include header %>
-
+<%= isOwner %>
+<% if(isOwner === true){ %>
+	<h6>Yup is the owner</h6>
+<% } %>
 <div id="playerFrame" class="container-fluid">
 	<link rel="stylesheet" href="/js/libs/jquery-1.9.0/jqueryUI.css">
     <script src="/js/libs/jquery-1.9.0/jquery.min.js"></script>
@@ -92,7 +95,7 @@
 				<%}%>
 			</div>
 			-->
-		
+
 
 			<div id="divDistortion" class="col-md-2">
 				<% for(var i=0; i<ttracks.instruments.length; i++) {%>
@@ -128,7 +131,7 @@
 						createSlider("slider-verticalB<%=i%>","mGain<%=i%>",<%=i%>);
 						createSlider("slider-verticalC<%=i%>","hGain<%=i%>",<%=i%>);
 					</script>
-					
+
 				</div>
 				<%}%>
 			</div>
@@ -217,55 +220,55 @@
 					<option value="38">Vocal Duo</option>
 				</select>
 			</div>
-			
+
 			<div id="divCompressor" class="col-md-6">
-		
+
 				<span id="labelCompressor">Compression :</span>
-				
+
 				<br/>
-				
-				<span id="txtThreshold">Threshold :</span>  
-				<input class = "rcompressor" type="range" id="thresholdRangeTest" min="0" max="100" value="24" 
+
+				<span id="txtThreshold">Threshold :</span>
+				<input class = "rcompressor" type="range" id="thresholdRangeTest" min="0" max="100" value="24"
 							oninput="changeCompressorThreshold(document.getElementById('thresholdRangeTest').value);">
 				<span id="valThreshold"> 	&nbsp;&nbsp;&nbsp; -24/-100</span>
-				
+
 				<br/>
-				
-				<span id="txtKnee">Knee :</span>  
-				<input class = "rcompressor" type="range" id="kneeRangeTest" min="0" max="40" value="30" 
+
+				<span id="txtKnee">Knee :</span>
+				<input class = "rcompressor" type="range" id="kneeRangeTest" min="0" max="40" value="30"
 							oninput="changeCompressorKnee(document.getElementById('kneeRangeTest').value);">
 				<span id="valKnee"> 	&nbsp;&nbsp;&nbsp; 30/40</span>
-				
+
 				<br/>
-				
-				<span id="txtRatio">Ratio :</span> 
-				<input class = "rcompressor" type="range" id="ratioRangeTest" min="1" max="20" value="12" 
+
+				<span id="txtRatio">Ratio :</span>
+				<input class = "rcompressor" type="range" id="ratioRangeTest" min="1" max="20" value="12"
 							oninput="changeCompressorRatio(document.getElementById('ratioRangeTest').value);">
 				<span id="valRatio"> 	&nbsp;&nbsp;&nbsp; 12/20</span>
-				
+
 				<br/>
-				
-				<span id="txtReduction">Reduction :</span>  
-				<input class = "rcompressor" type="range" id="reductionRangeTest" min="0" max="20" value="20" 
+
+				<span id="txtReduction">Reduction :</span>
+				<input class = "rcompressor" type="range" id="reductionRangeTest" min="0" max="20" value="20"
 							oninput="changeCompressorReduction(document.getElementById('reductionRangeTest').value);">
 				<span id="valReduction"> 	&nbsp;&nbsp;&nbsp; -20/-20</span>
-				
+
 				<br/>
-				
-				<span id="txtAttack">Attack :</span>  
-				<input class = "rcompressor" type="range" id="attackRangeTest" min="0" max="1000" value="3" 
+
+				<span id="txtAttack">Attack :</span>
+				<input class = "rcompressor" type="range" id="attackRangeTest" min="0" max="1000" value="3"
 							oninput="changeCompressorAttack(document.getElementById('attackRangeTest').value);">
 				<span id="valAttack"> 	&nbsp;&nbsp;&nbsp; 0.003/1.000</span>
-				
+
 				<br/>
-				
-				<span id="txtRelease">Release :</span>  
-				<input class = "rcompressor" type="range" id="releaseRangeTest" min="0" max="100" value="25" 
+
+				<span id="txtRelease">Release :</span>
+				<input class = "rcompressor" type="range" id="releaseRangeTest" min="0" max="100" value="25"
 							oninput="changeCompressorRelease(document.getElementById('releaseRangeTest').value);">
 				<span id="valRelease"> 	&nbsp;&nbsp;&nbsp; 0.25/1.00</span>
-				
+
 				<br/>
-				
+
 			</div>
 
 			<div id="divSave" class="col-md-6">
@@ -301,7 +304,7 @@
 
 <style>
 
-	
+
 	/** debug css chrome **/
 	input[type=range]{
 		-webkit-appearance: none;
@@ -328,7 +331,7 @@
 		width: 13px;
 		border-radius: 50%;
 		background: #00558b;
-		
+
 		position:relative;
 		top: -5px;
 	}
@@ -350,7 +353,7 @@
 		width: 20px;
 		border-radius: 10px;
 		cursor: pointer;
-		
+
 		position:relative;
 		top: -5px;
 	}
@@ -362,7 +365,7 @@
 		width: 20px;
 		border-radius: 10px;
 		cursor: pointer;
-		
+
 		position:relative;
 		top: -5px;
 	}
@@ -373,86 +376,86 @@
 		border: 1px solid #bdc3c7;
 		background-color: #fff;
 	}
-	
+
 	#divDistortion {
 		background-color: silver;
 		height: <%=ttracks.instruments.length*100 + 2%>px;
 	}
-	
+
 	#divEgaliseur{
 		background-color: silver;
 		height: <%=ttracks.instruments.length*100 + 2%>px;
 	}
-	
+
 	#tracks{
 		background-color: silver;
 		height: <%=ttracks.instruments.length*100 + 2%>px;
 	}
-	
+
 	.rangeVolumeClass{
 		width:80px;
 	}
-	
+
 	.imgMuteClass{
 		position:relative;
 		top:-10px;
 	}
-	
-	
+
+
 	.bDistortion{
 		display:none;
 	}
-	
+
 	.imgDistortion{
 		cursor:pointer;
 		z-index= 2;
 		left: 0px;
 	}
-	
+
 	#topPlayer{
 		background-color: silver;
 	}
-	
+
 	#playerFrame{
 		background-color: silver;
 	}
-	
+
 	.inputEgal{
 		background-color: silver;
 		width:30px;
 	}
-	
+
 	.rangeVolumeClass{
 
 		background-color: silver;
 	}
-	
+
 	.rfilter{
 		background-color: silver;
 	}
-	
+
 	#divFilter{
 		border: 1px solid black;
 		padding: 10px;
 	}
-	
+
 	#divReverb{
 		border: 1px solid black;
 		padding: 10px;
 	}
-	
+
 	#divCompressor{
 		border: 1px solid black;
 		padding: 10px;
 	}
-	
+
 	#divEgaliseur{
 		border: 1px solid black;
 		padding: 10px;
 		padding-right:30px;
 		padding-bottom: 30px;
 	}
-	
+
 	#divDistortion{
 		border-bottom: 1px solid black;
 		border-top: 1px solid black;
@@ -460,7 +463,7 @@
 		padding-left:20px;
 		padding-bottom:10px;
 	}
-	
+
 </style>
 
 <%- include footer  %>
