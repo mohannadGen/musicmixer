@@ -41,10 +41,9 @@ exports.getDashboard = function(req, res){
 
 exports.getUserProfile = function(request, response){
     console.log('Routed to the right function');
-    userModel.find({'local.username' : request.params.username}, function(err, foundUser){
-        songModel.find({'local.username': request.params.username, shared: true}, function(err, songs){
-            console.log("Found user " + foundUser);
-            response.render('profile.ejs', {user: foundUser, songs: songs});
+    userModel.findOne({'local.username' : request.params.username}, function(err, foundUser){
+        songModel.find({'user': foundUser, shared: true}, function(err, foundSongs){
+            response.render('profile.ejs', {user: foundUser, songs: foundSongs});
         });
     });
 };
@@ -94,11 +93,11 @@ exports.getUsernameById = function(id){
 };
 
 exports.search = function(request, response){
-    var keyword = request.params.keyword;
-    console.log('Entered in the search function with ' + keyword);
+    var body = request.body;
+    var keyword = body.text;
     userModel.find({'local.username': keyword}, function(err, users){
-        songModel.find({title: keyword}, function(err, songs){
-            response.render('search.ejs', {foundUsers:users , foundSongs:songs});
+        songModel.find({title: keyword, shared: true}, function(err, songs){
+            response.render('search.ejs', {query: keyword, foundUsers:users , foundSongs:songs});
         });
     });
 };

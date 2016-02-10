@@ -21,12 +21,18 @@ exports.getShared = function(req, res){
     });
 };
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 exports.loadSong = function (req, res) {
   var newPath = null,
       uploadedFileNames = [],
       uploadedImages,
       uploadedImagesCounter = 0;
-  var pp = __dirname + "/../../users/" + req.user._id+"/" + req.param("songname");
+      var strippedSongname = req.param("songname").replaceAll(' ', '_');
+  var pp = __dirname + "/../../users/" + req.user._id+"/" + strippedSongname;
   try{
     fs.mkdirSync(pp);
   }catch (e){
@@ -34,7 +40,7 @@ exports.loadSong = function (req, res) {
     req.flash('doublicateName', 'Douplicate song name');
     return res.render('dashboard.ejs',{user:req.user,songs:songslist,message:req.flash('doublicateName')});
   }
-  songModel.create({title: req.param("songname"), username: req.user.local.username, user: req.user, comments: []}, function(err ,song){
+  songModel.create({title: strippedSongname, username: req.user.local.username, user: req.user, comments: []}, function(err ,song){
      if(err) throw err;
   });
   if(req.files && req.files.uploadedImages) {

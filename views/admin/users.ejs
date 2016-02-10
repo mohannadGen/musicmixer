@@ -23,7 +23,7 @@
             <% } %>
         </td>
         <td><p data-toggle="tooltip" title="edit"><a href="/<%= users[i].local.username %>/edit" class="btn btn-info btn-xs"><span class="glyphicon glyphicon-pencil"></span></a></p></td>
-        <td><p data-toggle="tooltip" title="delete"><a href="/<%= users[i].local.username %>/delete" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></a></p></td>
+        <td><p data-toggle="tooltip" title="delete"><a href="user/delete/<%= users[i].local.username %>" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash"></span></a></p></td>
     </tr>
     <% } %>
 

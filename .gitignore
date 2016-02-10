@@ -52,6 +52,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-
 *.mp3
-/app/log/
+*.log
+/node_modules/*
