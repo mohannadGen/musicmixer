@@ -65,7 +65,7 @@ module.exports = function(app, passport){
     app.post('/play/:song/rating', urlencodedParser, playerController.saveRating);
 
     app.get('/play/:song/loadSettings', playerController.loadSettings);
-    app.post('/play/:song/saveSetting', urlencodedParser, playerController.saveSettings);
+    app.post('/play/:song/saveSettings', urlencodedParser, playerController.saveSettings);
 
     app.get('/play/:song', isLoggedIn, isAllowedAccess, playerController.playSong);
     app.get(/\/play\/((\w|.)+)/, playerController.loadtracks);

@@ -7,7 +7,7 @@ var songSchema = mongoose.Schema({
   title: String,
   username: String,
   user: { type : mongoose.Schema.ObjectId, ref : 'User'},
-  settings: {},
+  settings: String,
   comments: [{
     body: String,
     user: { type : mongoose.Schema.ObjectId, ref : 'User' },
