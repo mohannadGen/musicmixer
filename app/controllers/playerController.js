@@ -130,3 +130,22 @@ exports.loadRatings = function(request, response){
             response.json(myRatings);
     });
 };
+
+exports.loadSettings = function(request, response){
+    var songname = request.params.song;
+    songModel.findOne({title:songname}, function(err, song){
+        response.send(song.settings);
+    });
+};
+
+exports.saveSettings = function(request, response){
+    var body = request.body;
+    var settings = body.settings;
+    var songname = request.params.song;
+    songModel.findOne({title: songname}, function(err, song){
+        song.settings = settings;
+        song.save(function(){
+            response.end();
+        });
+    });
+};
