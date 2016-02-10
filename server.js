@@ -1,26 +1,42 @@
 /* jshint node: true */
-var express      = require('express');
-var app          = express();
-var port         = process.env.PORT || 8080;
-var mongoose     = require('mongoose');
-var passport     = require('passport');
-var flash        = require('connect-flash');
-var morgan       = require('morgan');
+var express = require('express');
+var app = express();
+var port  = process.env.PORT || 8080;
+var mongoose  = require('mongoose');
+var passport  = require('passport');
+var flash  = require('connect-flash');
+var winston = require('winston');
+var winstonMongoDB = require('winston-mongodb').MongoDB;
 var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
-var path         = require('path');
-var fs           = require('fs');
+var bodyParser = require('body-parser');
+var session = require('express-session');
+var path = require('path');
+var fs = require('fs');
 
 require('./config/passport')(passport); // pass passport for configuration
 
 // ==================================================
 // setting up express application ===================
-var accessLogStream = fs.createWriteStream(__dirname + '/app/log/access.log', {flags: 'a'});
-console.log("Logging to: " + __dirname + '/app/log/access.log');
 // setup the logger
-// app.use(morgan('combined', {stream: accessLogStream}));
-// app.use(morgan('dev'));
+app.configure('development', 'test', 'production', function(){
+    // Request Logging
+    var logger = new (winston.Logger)({
+        transports: [
+            new (winston.transports.Console)({colorize:true}),
+            new (winston.transports.File)({
+                level: 'info',
+                filename: './app/log/critical-logs.log',
+                handleExceptions: true,
+                json: true,
+                maxsize: 5242880, //5MB
+                maxFiles: 5,
+                colorize: false
+            })
+         ]
+    });
+    app.use(require('winston-request-logger').create(logger));
+});
+
 
 app.use(cookieParser());
 app.use(express.bodyParser({ keepExtensions: true, uploadDir: __dirname + '/_tmp' }));

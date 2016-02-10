@@ -72,3 +72,7 @@ exports.deleteUser = function(request, response){
         response.redirect('/admin/users');
     });
 };
+
+exports.logsData = function(request, response){
+    response.render("admin/logs.ejs");
+};

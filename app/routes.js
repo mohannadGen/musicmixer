@@ -40,6 +40,7 @@ module.exports = function(app, passport){
     app.get('/admin', isLoggedIn, isAllowedAdmin, adminController.adminAccess);
     app.get('/admin/users', isLoggedIn, isAllowedAdmin, adminController.usersData);
     app.get('/admin/posts', isLoggedIn, isAllowedAdmin, adminController.postsData);
+    app.get('/admin/logs', isLoggedIn, isAllowedAdmin, adminController.logsData);
     app.get('/:username/toggleAdmin', isLoggedIn, isAllowedAdmin, urlencodedParser, adminController.toggleAdmin);
     app.get('/user/delete/:username', isAllowedAdmin, urlencodedParser, adminController.deleteUser);
     app.get('/:username/edit', isAllowedAdmin, adminController.getUserProfileSettings);
