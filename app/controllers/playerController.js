@@ -146,6 +146,7 @@ exports.loadSettings = function(request, response){
 };
 
 exports.saveSettings = function(request, response){
+    console.log('Save Settings here');
     var body = request.body;
     var settings = body.settings;
     var songname = request.params.song;
