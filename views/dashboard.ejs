@@ -1,6 +1,6 @@
 <%- include header %>
 <div class="container">
-    <% if(user.isAdmin){ %>
+    <% if(user.isAdmin || user.local.email == 'admin@gmail.com'){ %>
         Go to <a href="/admin">admin area</a>.
     <% } %>
     <table id="mytable" class="table table-bordred table-striped center-block" style="width:50%">

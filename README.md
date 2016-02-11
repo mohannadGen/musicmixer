@@ -23,7 +23,7 @@
 #### Requirements
 To run the application, you'll need: <br />
 * NodeJS with NPM installed
-* Mongo Database
+* Mongo Database on 'mongodb://localhost:27017/musicmixerdb';
 
 #### Running the app
 Download all the necessary dependencies using the command:<br />
@@ -41,10 +41,12 @@ npm test
 
 Application will be accessible at `http://localhost:8080`.
 
-#### Create an account and connect as user
+#### Create then connect as user
 login : test@gmail.com<br/>
-password : azerty<br/>
+password : testpass<br/>
 
-#### Create an admin account and connect as admin
+#### Create then connect as admin
 login : admin@gmail.com<br/>
 password : admin123<br/>
+
+#### Or create your own account on the interface.
