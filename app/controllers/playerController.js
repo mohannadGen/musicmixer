@@ -139,6 +139,7 @@ exports.loadRatings = function(request, response){
 };
 
 exports.loadSettings = function(request, response){
+    console.log('Load function');
     var songname = request.params.song;
     songModel.findOne({title:songname}, function(err, song){
         response.send(song.settings);
@@ -149,6 +150,7 @@ exports.saveSettings = function(request, response){
     console.log('Save Settings here');
     var body = request.body;
     var settings = body.settings;
+    console.log(settings);
     var songname = request.params.song;
     songModel.findOne({title: songname}, function(err, song){
         song.settings = settings;
